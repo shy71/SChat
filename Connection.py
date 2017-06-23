@@ -5,13 +5,11 @@ class Connection:
 		self.ip=ip_address
 		self.port=port
 		self.socket = socket( AF_INET, SOCK_DGRAM )
-
 	def send(self,msg):
 		self.socket.sendto(msg,(self.ip,self.port))
 		
 	def recv(self):
 		return self.socket.recv(2048)
-		
 	def recvfrom(self):
 		return self.socket.recvfrom(2048)
 		
