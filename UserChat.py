@@ -28,7 +28,7 @@ class UserChat:
 	def sendOkMsg(self,peer,nounce):
 		self.peer=peer
 		self.nounce=nounce
-		self.peer.send('o;' + self.peer.aes.encrypt(nounce+';'+str(peer.port)))
+		self.peer.send('o;' + self.peer.aes.encrypt(nounce+';'+str(peer.sport)))
 		self.state='okSent'
 		
 
@@ -38,7 +38,7 @@ class UserChat:
 		header=resp.split(';')[0]
 		if header!='g':
 			Exception,'header not "g" in okSent state - '+header
-		if int(self.peer.aes.decrypt(resp.split(';')[1])) != int(self.nounce):	#Problem!  have to be should be +1											
+		if int(self.peer.aes.decrypt(resp.split(';')[1])) != int(self.nounce)+1:								
 			raise Exception, 'nounce isn\'t match the sended nounce! - '+ self.peer.aes.decrypt(resp.split(';')[1])+' -'+self.nounce
 		self.state='ready'
 		print 'Got GR Resp'
@@ -48,6 +48,7 @@ class UserChat:
 		if header!='o':
 			raise Exception,'header not "o" in syn state - '+header
 		nounce,port=self.peer.aes.decrypt(resp.split(';')[1]).split(';')
+		self.peer.changePort(int(port))
 		self.peer.port=int(port)
 		if nounce != self.nounce:
 			raise Exception, 'nounce isn\'t match the sended nounce! - '+self.nounce

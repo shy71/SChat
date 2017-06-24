@@ -37,19 +37,19 @@ class ClientChat:
 	#def serverRecv(self):
 	#	self.handleMsg(self.server.recv(),self.server)
 		
-	def startChat(self,dUsername):
-		self.chats[dUsername]=UserChat(self.username,dUsername)
-		self.chats[dUsername].sendInfoReq(self.server)
-		self.chats[dUsername].handleMsg(self.server.recv(),self.server)
-		self.chats[dUsername].startChat()
-		self.chats[dUsername].handleMsg(self.chats[dUsername].con.recv(),self.chats[dUsername].con)
-		self.chats[dUsername].handleMsg(self.chats[dUsername].con.recv(),self.chats[dUsername].con)
-	def waitForChat(self):
-		conn=UserChat(self.username,'')
-		con=Connection(gethostbyname( '0.0.0.0' ),CHAT_SYN_PORT)
-		con.bind()
-		conn.handleMsg(con.recv(),con)
-		conn.handleMsg(con.recv(),con)
+	#def startChat(self,dUsername):
+	#	self.chats[dUsername]=UserChat(self.username,dUsername)
+	#	self.chats[dUsername].sendInfoReq(self.server)
+	#	self.chats[dUsername].handleMsg(self.server.recv(),self.server)
+	#	self.chats[dUsername].startChat()
+	#	self.chats[dUsername].handleMsg(self.chats[dUsername].con.recv(),self.chats[dUsername].con)
+	#	self.chats[dUsername].handleMsg(self.chats[dUsername].con.recv(),self.chats[dUsername].con)
+	#def waitForChat(self):
+	#	conn=UserChat(self.username,'')
+	#	con=Connection(gethostbyname( '0.0.0.0' ),CHAT_SYN_PORT)
+	#	con.bind()
+	#	conn.handleMsg(con.recv(),con)
+	#	conn.handleMsg(con.recv(),con)
 
 	def handleConReq(self,resp):
 		header=resp.split(';')[0]
