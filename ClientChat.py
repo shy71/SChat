@@ -123,7 +123,7 @@ class ClientChat:
 		return data.split(';')[1:]
 
 	def isConnected(self):
-		if time()-self.ctime<20:
+		if time()-self.ctime<21600:
 			return True#6 Hourse
 		self.state='start'
 		return False
