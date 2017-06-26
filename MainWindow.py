@@ -35,11 +35,11 @@ def press(button):
 		usr = app.getEntry("Username")
 		check,c = checkUsername(usr)
 		if check:
-			window = openChatWindow(c)
+			window = openChatWindow(c,usr)
 			window.openWindow()
 			app.stop()
-		
+
+app.addLabel("Choose","Enter username you want to use to join:")
 app.addEntry("Username")
-app.addLabel("Choose","Choose one of the following choices:")
-app.addButtons(["Submit", "Cancel"], press)
+app.addButtons(["Log in", "Cancel"], press)
 app.go()

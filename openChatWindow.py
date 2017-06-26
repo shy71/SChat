@@ -10,15 +10,16 @@ import time
 from appJar import gui
 
 class openChatWindow:
-	def __init__(self,server):#,username,ip,sharedKey,nounce,token
+	def __init__(self,server,username):#,username,ip,sharedKey,nounce,token
 		self.app2 = gui("Login Window","400x200")
 		self.server = server
+		self.username = username
 		pass
 	
 	def chatf(self,button):
 		cht = self.app2.getEntry("chat")
 		dIp,sharedkey, nounce,token= self.server.getInfo(cht)
-		p=P2PChat() #<-need username
+		p=P2PChat(self.username) #<-need username
 		p.startChat(cht,dIp,5002,sharedkey,nounce,token)
 		p.LoadChat()
 	def exit(self,button):
