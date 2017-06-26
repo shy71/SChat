@@ -1,12 +1,12 @@
 from socket import socket, gethostbyname, AF_INET, SOCK_DGRAM
 import re
 import sys
-import AESCipher
+from SChat import AESCipher
 from M2Crypto import RSA
 from time import time
 import binascii
 import os
-from ServerError import ServerError
+from SChat import ServerError
 PORT_NUMBER = 5000
 SIZE = 256
 mySocket = socket( AF_INET, SOCK_DGRAM )
