@@ -1,12 +1,8 @@
 from UserChat import UserChat
 from P2PConnection import P2PConnection
 from Connection import Connection
-from AESCipher import AESCipher
-import select
 import threading
 from ClientChat import loadKey
-import time
-import sys
 class P2PChat:
 	def __init__(self,sUser):#,username,ip,sharedKey,nounce,token
 		self.suser=sUser
@@ -44,7 +40,7 @@ class P2PChat:
 		inCon=Connection('0.0.0.0',0)
 		inCon.bind(5002,None)
 		while not inCon.isNewMsg():
-			time.sleep(1)
+			pass
 		msg,addr=inCon.recvfrom()
 		inCon.close()
 		self.gotChatRequest(addr[0],addr[1],msg)

@@ -1,6 +1,5 @@
 from Connection import Connection
 from AESCipher import AESCipher
-import select
 class P2PConnection(Connection):
 	def __init__(self,ip_address,port,key):
 		Connection.__init__(self,ip_address,port)

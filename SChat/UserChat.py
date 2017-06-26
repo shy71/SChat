@@ -1,7 +1,3 @@
-from ServerConnection import ServerConnection
-CHAR_SYN_START=5001
-from random import randint
-from P2PConnection import P2PConnection
 from AESCipher import AESCipher
 import binascii
 class UserChat:
