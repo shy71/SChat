@@ -14,7 +14,9 @@ class Connection:
 		self.sport=self.socket.getsockname()[1]
 	def send(self,msg):
 		#print 'S -'+msg
-		self.socket.sendto(msg,(self.ip,self.port))
+		self.sendto(msg,(self.ip,self.port))
+	def sendto(self,msg,addr):
+		self.socket.sendto(msg,addr)
 	def bind(self,port,timeout):
 		self.socket.close()
 		self._buildSocket((self.sip,port),timeout)

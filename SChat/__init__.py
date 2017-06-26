@@ -7,3 +7,4 @@ from P2PConnection import P2PConnection
 from ServerConnection import ServerConnection
 from ServerError import ServerError
 from UserChat import UserChat
+from SChatServer import SChatServer
