@@ -11,6 +11,8 @@ class P2PChat:
 	def __init__(self,sUser):#,username,ip,sharedKey,nounce,token
 		self.suser=sUser
 	def startChat(self,duser,ip,port,sharedKey,nounce,token):#why need username?
+		print duser
+		print ip
 		self.socket=P2PConnection(ip,port,sharedKey)
 		self.help=UserChat('lead')
 		self.help.sendSyn(self.socket,nounce,token)
@@ -39,7 +41,7 @@ class P2PChat:
 		print 'Chat Up'
 	def waitForRequest(self):
 		inCon=Connection('0.0.0.0',0)
-		inCon.bind(5002)
+		inCon.bind(5002,None)
 		while not inCon.isNewMsg():
 			time.sleep(1)
 		msg,addr=inCon.recvfrom()
@@ -48,6 +50,8 @@ class P2PChat:
 	def startActiveChat(self):
 		while self.open:
 			data = self.socket.tryRecvChat()
+			if not data:
+				continue
 			if data:
 				print '\r'+self.duser+': '+data
 				print self.suser+': ',
