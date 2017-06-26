@@ -8,3 +8,4 @@ from ServerConnection import ServerConnection
 from ServerError import ServerError
 from UserChat import UserChat
 from SChatServer import SChatServer
+from SChatError import SChatError

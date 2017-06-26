@@ -11,6 +11,7 @@ from SChat import Connection
 class SChatServer:
 	def __init__(self,path_to_rsa,passphrase,userfilepath):
 		self.usersIp={}
+		self.usersConnectTime={}
 		self.userfilepath=userfilepath
 		self.rsa=RSA.load_key(path_to_rsa,lambda x: passphrase)
 		self.users=self.getUsers()
@@ -98,6 +99,7 @@ class SChatServer:
 		if abs(time()-int(tokTime))>300:
 			return 22
 		self.usersIp[srcUser]=addr[0]
+		self.usersConnectTime[srcUser]=time()
 		self.sendSucess(addr,srcUser,'c;'+tokTime)
 		return 1
 	def sendInfo(self,addr,srcUser,desUser,nounce,sharedKey):
@@ -105,6 +107,9 @@ class SChatServer:
 			self.sendError(addr,'32')
 		if desUser not in self.usersIp:
 			self.sendError(addr,'33')
+		if time()-self.usersConnectTime[srcUser]>21600:
+			del self.usersIp[desUser]
+			del self.usersConnectTime[desUser]
 		token=srcUser+';'+sharedKey+';'+str(nounce)
 		encToken=self.encrypForUser(desUser,token) 
 			#raise Exception(encrypForUser(userName,'Error - User '+desUser+' not connected'))

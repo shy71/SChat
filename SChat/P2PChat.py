@@ -3,6 +3,7 @@ from P2PConnection import P2PConnection
 from Connection import Connection
 import threading
 from ClientChat import loadKey
+from SChatError import SChatError
 class P2PChat:
 	def __init__(self,sUser):#,username,ip,sharedKey,nounce,token
 		self.suser=sUser
@@ -82,7 +83,6 @@ class P2PChat:
 			msg=self.inputlist[0]
 			self.inputlist.remove(msg)
 			return msg
-		return None
 	def output(self,msg):
 		if not self.open:
 			return
@@ -93,5 +93,7 @@ class P2PChat:
 	def closeChat(self):
 		self.open=False
 		self.socket.close()
+		raise SChatError('Chat has been closed!')
+
 	
 		

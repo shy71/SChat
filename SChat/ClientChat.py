@@ -3,6 +3,7 @@ from random import randint
 from AESCipher import AESCipher
 from time import time
 from SChatError import SChatError
+import re
 import binascii
 import os
 
@@ -17,7 +18,7 @@ class ClientChat:
 		self.chats={}
 	def register(self,username):
 		if self.state!='start':
-			raise SChatError('Can\'t send register request in the middle of a diffrent request'
+			raise SChatError('Can\'t send register request in the middle of a diffrent request')
 		self.nounce = randint(1, 65536)
 		self.random_key=binascii.hexlify(os.urandom(32))
 		self.server.aes=AESCipher(self.random_key)
@@ -28,7 +29,7 @@ class ClientChat:
 		header=resp.split(';')[0]
 		if header=='e':
 			self.state='start'
-			raise SChatError.toSChatError(resp.split(';')[1])
+			raise toSChatError(resp.split(';')[1])
 		if self.state=='regReq':
 			self.handleRegReq(resp)
 		if self.state=='conReq':
@@ -65,7 +66,7 @@ class ClientChat:
 		self.state='start'
 	def connect(self,username):
 		if self.state!='start':
-			raise SChatError('Can\'t send CONNECT request in the middle of a diffrent request'
+			raise SChatError('Can\'t send CONNECT request in the middle of a diffrent request')
 		self.nounce = randint(1, 65536)
 		key=loadKey(username)
 		self.server.aes = AESCipher(key)
