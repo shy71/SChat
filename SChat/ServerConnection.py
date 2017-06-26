@@ -1,5 +1,4 @@
 from Connection import Connection
-from AESCipher import AESCipher
 from M2Crypto import RSA 
 
 class ServerConnection(Connection):

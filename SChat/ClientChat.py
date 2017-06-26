@@ -3,12 +3,8 @@ from random import randint
 import binascii
 import os
 from AESCipher import AESCipher
-import re
 from time import time
 from ServerError import ServerError
-from Connection import Connection
-from socket import socket, AF_INET, SOCK_DGRAM,gethostbyname
-CHAT_SYN_PORT=5001
 def loadKey(username):
 		with open('users.d','r') as f:
 			return re.search('{'+username+';([a-z|0-9]+)}\n',f.read()).group(1)

@@ -1,5 +1,4 @@
 import re
-import sys
 from SChat import AESCipher
 from M2Crypto import RSA
 from time import time
