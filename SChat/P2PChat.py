@@ -78,7 +78,7 @@ class P2PChat:
 			data = self.socket.tryRecvChat()
 			if not data:
 				continue
-			self.inputlist.extend(data)
+			self.inputlist.append(data)
 			if data.startswith('!'):
 				if data=='!exit':
 					self.closeChat()
