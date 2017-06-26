@@ -9,6 +9,9 @@ from ServerError import ServerError
 from Connection import Connection
 from socket import socket, AF_INET, SOCK_DGRAM,gethostbyname
 CHAT_SYN_PORT=5001
+def loadKey(username):
+		with open('users.d','r') as f:
+			return re.search('{'+username+';([a-z|0-9]+)}\n',f.read()).group(1)
 class ClientChat:
 	def __init__(self,server):
 		self.server=server
@@ -62,6 +65,7 @@ class ClientChat:
 		timestamp=plainData.split(';')[1]
 		if abs(time()-int(timestamp))>300:
 			raise Exception, 'Error! The timestamp has expired.'
+		self.ctime=time()
 		self.state = 'connected'
 	def handleRegReq(self,resp):
 		header=resp.split(';')[0]
@@ -83,17 +87,15 @@ class ClientChat:
 			raise Exception,'Can\'t connect if the state is not \'start\'!'
 		#make it send to the server the username chosen
 		self.nounce = randint(1, 65536)
-		key=self.loadKey(username)
+		key=loadKey(username)
 		self.server.aes = AESCipher(key)
 		self.username=username
 		self.server.send('c;' + username + ';' + self.server.aes.encrypt(binascii.hexlify(username+';' + str(int(time())))))
 		self.state='conReq'
+	
 	def addUsername(self,username,key):
 		with open('users.d','a+') as f:
 			f.write('{'+username+';'+key+'}\n')
-	def loadKey(self,username):
-		with open('users.d','r') as f:
-			return re.search('{'+username+';([a-z|0-9]+)}\n',f.read()).group(1)
 			
 			
 			
@@ -120,7 +122,11 @@ class ClientChat:
 		print 'Got Info Resp'
 		return data.split(';')[1:]
 
-
+	def isConnected(self):
+		if time()-self.ctime<20:
+			return True#6 Hourse
+		self.state='start'
+		return False
 	
 	def _buildInfoMsg(self,username):
 		self.nounce = str(randint(1, 65536))

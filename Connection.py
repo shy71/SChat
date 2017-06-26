@@ -1,19 +1,23 @@
 from socket import socket,gethostbyname, AF_INET, SOCK_DGRAM
-
+import select
 class Connection:
 	def __init__(self,ip_address,port):
-		self.sip=gethostbyname('0.0.0.0')
 		self.ip=ip_address
 		self.port=port
-		self.socket = socket( AF_INET, SOCK_DGRAM )
-		self.socket.settimeout(30)
-		self.socket.bind((self.sip,0))
-		self.sport=self.socket.getsockname()[1]
+		self._buildSocket((gethostbyname('0.0.0.0'),0),30)
 	#	s.connect((self.ip,self.port))
-
+	def _buildSocket(self,addr,timeout):
+		self.socket = socket( AF_INET, SOCK_DGRAM )
+		self.socket.settimeout(timeout)
+		self.socket.bind(addr)
+		self.sip=self.socket.getsockname()[0]
+		self.sport=self.socket.getsockname()[1]
 	def send(self,msg):
+		#print 'S -'+msg
 		self.socket.sendto(msg,(self.ip,self.port))
-		
+	def bind(self,port):
+		self.socket.close()
+		self._buildSocket((self.sip,port),30)
 	def recv(self):
 		return self.socket.recv(2048)
 	def tryRecv(self):
@@ -35,3 +39,9 @@ class Connection:
 		return (self.ip,self.port)
 	def close(self):
 		return self.socket.close()
+	def isNewMsg(self):
+		sok=select.select([self.socket],[],[],0)
+		if not sok[0]:
+			return True
+	def settimeout(self,timeout):
+		self.socket.settimeout(timeout)

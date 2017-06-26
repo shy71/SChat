@@ -11,6 +11,7 @@ class P2PConnection(Connection):
 	def recvChat(self):
 		return self.aes.decrypt(self.recv())
 	def tryRecvChat(self):
-		sok=select.select([self.socket],[],[],0)
-		if not sok[0]:
+		if self.isNewMsg():
 			return self.recvChat()
+	def startChat(self):
+		self.settimeout(None)

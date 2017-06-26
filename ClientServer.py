@@ -23,6 +23,8 @@ class ClientServer:
 			raise resp 
 		self.help.handleMsg(resp)
 	def getInfo(self,username):
+		if not self.help.isConnected():
+			self._connect()
 		self.help.sendInfoReq(username)
 		responded,resp=self.server.tryRecv()
 		if not responded:
