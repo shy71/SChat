@@ -1,10 +1,10 @@
-from ClientServer import ClientServer
-from ServerConnection import ServerConnection
-from Connection import Connection
+from SChat import ClientServer
+from SChat import ServerConnection
+from SChat import Connection
 from socket import socket,gethostbyname, AF_INET, SOCK_DGRAM
 
 from random import randint
-from P2PChat import P2PChat
+from SChat import P2PChat
 
 username='ezra'
 server=raw_input('Server: ')
