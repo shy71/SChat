@@ -10,6 +10,7 @@ import sys
 class P2PChat:
 	def __init__(self,sUser):#,username,ip,sharedKey,nounce,token
 		self.suser=sUser
+		self.inputlist=[]
 	def startChat(self,duser,ip,port,sharedKey,nounce,token):#why need username?
 		print duser
 		print ip
@@ -47,30 +48,55 @@ class P2PChat:
 		msg,addr=inCon.recvfrom()
 		inCon.close()
 		self.gotChatRequest(addr[0],addr[1],msg)
+	#def startActiveChatCMD(self):
+	#	while self.open:
+	#		data = self.socket.tryRecvChat()
+	#		if not data:
+	#			continue
+	#		if data:
+	#			print '\r'+self.duser+': '+data
+	#			print self.suser+': ',
+	#		if data.startswith('!'):
+	#			if data=='!exit':
+	#				self.closeChat()
+	#				print 'Press enter to continue'
+	#def LoadChatCMD(self):
+	#	print 'Secure Chat with ' +self.duser
+	#	recv_thread = threading.Thread(target=self.startActiveChatCMD)
+	#	recv_thread.setDaemon(True)
+	#	recv_thread.start()
+	#	while self.open:
+	#		inp= raw_input('\r'+self.suser+': ')
+	#		if not self.open:
+	#			return
+	#		self.socket.sendChat(inp)
+	#		if inp.startswith('!'):
+	#			if inp=='!exit':
+	#				self.closeChat()
 	def startActiveChat(self):
 		while self.open:
 			data = self.socket.tryRecvChat()
 			if not data:
 				continue
-			if data:
-				print '\r'+self.duser+': '+data
-				print self.suser+': ',
+			self.inputlist.extend(data)
 			if data.startswith('!'):
 				if data=='!exit':
 					self.closeChat()
-					print 'Press enter to continue'
 	def LoadChat(self):
-		print 'Secure Chat with ' +self.duser
 		recv_thread = threading.Thread(target=self.startActiveChat)
 		recv_thread.setDaemon(True)
 		recv_thread.start()
-		while self.open:
-			inp= raw_input('\r'+self.suser+': ')
-			if not self.open:
-				return
-			self.socket.sendChat(inp)
-			if inp.startswith('!'):
-				if inp=='!exit':
+	def input(self):
+		if self.inputlist:
+			msg=self.inputlist[0]
+			self.inputlist.remove(msg)
+			return msg
+	def output(self,msg):
+		if not self.open:
+			return
+		self.socket.sendChat(msg)
+		if msg.startswith('!'):
+				if msg=='!exit':
 					self.closeChat()
 	def closeChat(self):
 		print

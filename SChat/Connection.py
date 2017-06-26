@@ -19,9 +19,13 @@ class Connection:
 		self.socket.close()
 		self._buildSocket((self.sip,port),timeout)
 	def recv(self):
+		#a=self.socket.recv(2048)
+		#print 'R -'+a
 		return self.socket.recv(2048)
 	def tryRecv(self):
 		try:
+			#a=self.recv()
+			#print 'R -'+a
 			return True,self.recv()
 		except Exception as er:
 			return False,er
