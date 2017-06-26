@@ -11,7 +11,7 @@ from appJar import gui
 
 class openChatWindow:
 	def __init__(self,server,username):#,username,ip,sharedKey,nounce,token
-		self.app2 = gui("Login Window","400x200")
+		self.app2 = gui("Options Window","400x200")
 		self.server = server
 		self.username = username
 		pass

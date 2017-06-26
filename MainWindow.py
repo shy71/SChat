@@ -12,7 +12,7 @@ from random import randint
 from SChat import P2PChat
 
 
-app = gui("Login Window", "400x200")
+app = gui("Login Window", "500x200")
 app.setBg("orange")
 app.setFont(18)
 
