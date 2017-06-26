@@ -8,21 +8,17 @@ class P2PChat:
 		self.suser=sUser
 		self.inputlist=[]
 	def startChat(self,duser,ip,port,sharedKey,nounce,token):#why need username?
-		print duser
-		print ip
 		self.socket=P2PConnection(ip,port,sharedKey)
 		self.help=UserChat('lead')
 		self.help.sendSyn(self.socket,nounce,token)
 		responded,resp=self.socket.tryRecv()
 		if not responded:
-			print 'Peer didn\'t responded! - Syn'
-			raise resp 
+			raise SChatError('Peer didn\'t responded in the start of setting up the chat(Hi msg) - '+str(resp)) 
 		self.help.handleMsg(resp)
 		self.userinput=[]
 		self.duser=duser
 		self.socket.startChat()
-		self.open=True		
-		print 'Chat Up'
+		self.open=True
 	def gotChatRequest(self,ip,port,msg):
 		self.help=UserChat('wait')
 		self.duser,sharedKey,nounce=self.help.handleSynReq(msg,loadKey(self.suser))
@@ -30,8 +26,7 @@ class P2PChat:
 		self.help.sendOkMsg(self.socket,nounce)
 		responded,resp=self.socket.tryRecv()
 		if not responded:
-			print 'Peer didn\'t responded! - Ok'
-			raise resp
+			raise SChatError('Peer didn\'t responded in the middle of setting up the chat(Ok msg) - '+str(resp))
 		self.help.handleMsg(resp)
 		self.socket.startChat()
 		self.open=True
@@ -44,31 +39,31 @@ class P2PChat:
 		msg,addr=inCon.recvfrom()
 		inCon.close()
 		self.gotChatRequest(addr[0],addr[1],msg)
-	#def startActiveChatCMD(self):
-	#	while self.open:
-	#		data = self.socket.tryRecvChat()
-	#		if not data:
-	#			continue
-	#		if data:
-	#			print '\r'+self.duser+': '+data
-	#			print self.suser+': ',
-	#		if data.startswith('!'):
-	#			if data=='!exit':
-	#				self.closeChat()
-	#				print 'Press enter to continue'
-	#def LoadChatCMD(self):
-	#	print 'Secure Chat with ' +self.duser
-	#	recv_thread = threading.Thread(target=self.startActiveChatCMD)
-	#	recv_thread.setDaemon(True)
-	#	recv_thread.start()
-	#	while self.open:
-	#		inp= raw_input('\r'+self.suser+': ')
-	#		if not self.open:
-	#			return
-	#		self.socket.sendChat(inp)
-	#		if inp.startswith('!'):
-	#			if inp=='!exit':
-	#				self.closeChat()
+	def startActiveChatCMD(self):
+		while self.open:
+			data = self.socket.tryRecvChat()
+			if not data:
+				continue
+			if data:
+				print '\r'+self.duser+': '+data
+				print self.suser+': ',
+			if data.startswith('!'):
+				if data=='!exit':
+					self.closeChat()
+					print 'Press enter to continue'
+	def LoadChatCMD(self):
+		print 'Secure Chat with ' +self.duser
+		recv_thread = threading.Thread(target=self.startActiveChatCMD)
+		recv_thread.setDaemon(True)
+		recv_thread.start()
+		while self.open:
+			inp= raw_input('\r'+self.suser+': ')
+			if not self.open:
+				return
+			self.socket.sendChat(inp)
+			if inp.startswith('!'):
+				if inp=='!exit':
+					self.closeChat()
 	def startActiveChat(self):
 		while self.open:
 			data = self.socket.tryRecvChat()
@@ -95,8 +90,6 @@ class P2PChat:
 				if msg=='!exit':
 					self.closeChat()
 	def closeChat(self):
-		print
-		print 'Chat closed'
 		self.open=False
 		self.socket.close()
 	

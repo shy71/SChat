@@ -1,5 +1,5 @@
 from ClientChat import ClientChat
-
+from SChatError import SChatError
 class ClientServer:
 	def __init__(self,server,username,isRegister):
 		self.server=server
@@ -12,15 +12,13 @@ class ClientServer:
 		self.help.register(self.username)
 		responded,resp=self.server.tryRecv()
 		if not responded:
-			print 'Server didn\'t responded! - Register'
-			raise resp 
+			raise SChatError('Server didn\'t responded in the start of the Register request - '+str(resp)) 
 		self.help.handleMsg(resp)
 	def _connect(self):
 		self.help.connect(self.username)
 		responded,resp=self.server.tryRecv()
 		if not responded:
-			print 'Server didn\'t responded! - Connect'
-			raise resp 
+			raise SChatError('Server didn\'t responded in the start of the Connect request - '+str(resp)) 
 		self.help.handleMsg(resp)
 	def getInfo(self,username):
 		if not self.help.isConnected():
@@ -28,8 +26,7 @@ class ClientServer:
 		self.help.sendInfoReq(username)
 		responded,resp=self.server.tryRecv()
 		if not responded:
-			print 'Server didn\'t responded! - GetInfo'
-			raise resp 
+			raise SChatError('Server didn\'t responded in the start of the Get Info request - '+str(resp)) 
 		return self.help.handleMsg(resp) #dIp,sharedkey, nounce,token
 	def close(self):
 		self.server.close()

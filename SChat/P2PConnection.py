@@ -1,5 +1,6 @@
 from Connection import Connection
 from AESCipher import AESCipher
+from SChatError import SChatError
 class P2PConnection(Connection):
 	def __init__(self,ip_address,port,key):
 		Connection.__init__(self,ip_address,port)
@@ -8,7 +9,10 @@ class P2PConnection(Connection):
 	def sendChat(self,msg):
 		self.send(self.aes.encrypt(msg))
 	def recvChat(self):
-		return self.aes.decrypt(self.recv())
+		try:
+			return self.aes.decrypt(self.recv())
+		except Exception as er:
+			raise SChatError('Problem with decryption of the recived data - '+str(er))			
 	def tryRecvChat(self):
 		if self.isNewMsg():
 			return self.recvChat()

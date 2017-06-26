@@ -5,7 +5,6 @@ class Connection:
 		self.ip=ip_address
 		self.port=port
 		self._buildSocket((gethostbyname('0.0.0.0'),0),30)
-	#	s.connect((self.ip,self.port))
 	def _buildSocket(self,addr,timeout):
 		self.socket = socket( AF_INET, SOCK_DGRAM )
 		self.socket.settimeout(timeout)
@@ -35,12 +34,6 @@ class Connection:
 		return self.socket.recvfrom(2048)
 	def changePort(self,port):
 		self.port=port
-	#	self.port=port
-	#	self.socket.close()
-	#	self.socket.connect((self.ip,self.port))
-	#def bind(self,port):
-	#	self.socket.bind((self.sip,port))
-	#	self.sport=port
 	def getaddr(self):
 		return (self.ip,self.port)
 	def close(self):

@@ -1,4 +1,5 @@
 from AESCipher import AESCipher
+from SChatError import SChatError
 import binascii
 class UserChat:
 	def __init__(self,state):
@@ -7,7 +8,7 @@ class UserChat:
 		header=resp.split(';')[0]
 		if header=='e':
 			self.state='lead'
-			raise ServerError(resp.split(';')[1])
+			raise SChatError.toSChatError(resp.split(';')[1])
 		if self.state=='syn':
 			self.handleOkResp(resp)
 		if self.state=='wait':
@@ -17,48 +18,48 @@ class UserChat:
 	def handleSynReq(self,resp,serverKey):
 		header=resp.split(';')[0]
 		if header!='h':
-			Exception,'header not "h" in wait state - '+header
-		print 'Got syn Req'
-		return binascii.unhexlify(AESCipher(serverKey).decrypt(resp.split(';')[1])).split(';') #username,sharedKey,nounce
-		
+			raise SChatError('Got invalid msg(header) while in \'wait\' state!')
+		try:
+			return binascii.unhexlify(AESCipher(serverKey).decrypt(resp.split(';')[1])).split(';') #username,sharedKey,nounce
+		except Exception as err:
+			raise SChatError('Invalid content in Hi request, problem with decryption! - '+str(er))
 	def sendOkMsg(self,peer,nounce):
 		self.peer=peer
 		self.nounce=nounce
 		self.peer.send('o;' + self.peer.aes.encrypt(nounce+';'+str(peer.sport)))
-		self.state='okSent'
-		
-
-		
+		self.state='okSent'	
 	def handleGrResp(self,resp):
 		#expect the next message (g - ack)
 		header=resp.split(';')[0]
 		if header!='g':
-			Exception,'header not "g" in okSent state - '+header
-		if int(self.peer.aes.decrypt(resp.split(';')[1])) != int(self.nounce)+1:								
-			raise Exception, 'nounce isn\'t match the sended nounce! - '+ self.peer.aes.decrypt(resp.split(';')[1])+' -'+self.nounce
+			raise SChatError('Got invalid msg(header) while in \'okSent\' state!')
+		recvNounce=int(self.decryptAes(resp.split(';')[1]))
+		if recvNounce!= int(self.nounce)+1:	
+			raise SChatError('Received nounce sent back by the server isn\'t compatible with the\n nounce number sent originally by you... \nYou may be under attack if this error continue to apper!')
 		self.state='ready'
-		print 'Got GR Resp'
-
+	def decryptAes(self,msg):
+		try:
+			return self.peer.aes.decrypt(msg)
+		except Exception as er:
+			raise SChatError('Invalid msg, can\'t decrypt the data, maybe wrong key or unauthorized source! - '+str(er))
 	def handleOkResp(self,resp):
 		header=resp.split(';')[0]
 		if header!='o':
-			raise Exception,'header not "o" in syn state - '+header
-		nounce,port=self.peer.aes.decrypt(resp.split(';')[1]).split(';')
+			raise SChatError('Got invalid msg(header) while in \'syn\' state!')
+		nounce,port=self.decryptAes(resp.split(';')[1]).split(';')
 		self.peer.changePort(int(port))
 		self.peer.port=int(port)
 		if nounce != self.nounce:
-			raise Exception, 'nounce isn\'t match the sended nounce! - '+self.nounce
+			raise SChatError('Received nounce sent back by the server isn\'t compatible with the\n nounce number sent originally by you... \nYou may be under attack if this error continue to apper!')
 		self.peer.send('g;' + self.peer.aes.encrypt(str(int(self.nounce) + 1)))
 		self.state='ready'
-		print 'Got syn Resp'
 
 
 	def sendSyn(self,peer,nounce,token):
 		self.peer=peer
 		if self.state!='lead':
-			raise Exception,'Can\'t start chat without getting info from the server about the user!'
+			raise SChatError('Can\'t start chat without getting info from the server about the unknown user!')
 		self.peer.send('h;'+token)
 		self.nounce=nounce
 		self.state='syn'
-		print 'Send Syn'
 	

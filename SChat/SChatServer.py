@@ -19,7 +19,6 @@ class SChatServer:
 		print 'Server Ready'
 	def runServer(self):
 		while True:
-				print 'Waiting for transmissions'
 				data,addr=self.con.recvfrom()
 				self.handleMsg(addr,data)
 	#def getPassprashe(num):
