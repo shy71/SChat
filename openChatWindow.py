@@ -3,8 +3,8 @@ from M2Crypto import RSA
 from SChat import ServerConnection
 from random import randint
 from SChat import P2PChat
-
-
+from chatWindow import chatWin
+import threading
 import sys
 import time
 from appJar import gui
@@ -15,7 +15,14 @@ class openChatWindow:
 		self.server = server
 		self.username = username
 		pass
-	
+	def waitForChatPolling(self):
+		while True:
+			p = P2PChat(self.username)
+			p.waitForRequest()
+			if p.open = True:
+				cwindow = chatWindow(p)
+				cwindow.openWindow()
+				#openchatwindow with that user
 	def chatf(self,button):
 		cht = self.app2.getEntry("chat")
 		dIp,sharedkey, nounce,token= self.server.getInfo(cht)
@@ -37,4 +44,7 @@ class openChatWindow:
 		self.app2.addVerticalSeparator(0,1,1,4, colour="red")
 		self.app2.addButton("Exit",self.exit,3,2)
 		self.app2.go()
+		recv_thread = threading.Thread(target=self.waitForChatPolling)
+		recv_thread.setDaemon(True)
+		recv_thread.start()
 		

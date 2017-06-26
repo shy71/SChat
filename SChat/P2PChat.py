@@ -91,6 +91,7 @@ class P2PChat:
 			msg=self.inputlist[0]
 			self.inputlist.remove(msg)
 			return msg
+		return None
 	def output(self,msg):
 		if not self.open:
 			return
