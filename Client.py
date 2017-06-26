@@ -5,8 +5,8 @@ from P2PChat import P2PChat
 import time
 
 username='shy'+str(randint(1,65555))
-c=ClientServer(ServerConnection('127.0.0.1',5000,None,'keys/key.pem'),username,False)
-time.sleep(25)
+server=raw_input('Server: ')
+c=ClientServer(ServerConnection(server,5000,None,'keys/key.pem'),username,False)
 dIp,sharedkey, nounce,token= c.getInfo('ezra')
 p=P2PChat(username)
 p.startChat('ezra',dIp,5002,sharedkey,nounce,token)
