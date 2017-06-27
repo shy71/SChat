@@ -40,15 +40,15 @@ class chatWin:
 	def chatf(self,button):
 		cht = self.app2.getEntry("chat")
 		#msgText = self.app2.getLabel("chattext") + '\n' + cht
-		self.pchat.output(self.username + ': ' +cht,self.username)
-		self.addListItem("list",self.username + ": " + msg)
+		self.pchat.output(self.username + ': ' +cht)
+		self.app2.addListItem("list",self.username + ": " + cht)
 		#make it change the stream and update the label here too
 		print cht
 	def updateChatPolling(self):
 		while True:
 			msg = self.pchat.input()
 			if not msg == None:
-				self.addListItem("list",self.peerUsername + ": " + msg)
+				self.app2.addListItem("list",self.peerUsername + ": " + msg)
 			#get updated stream from method which shy will implement
 			#update the label 
 			if msg=='!exit':
