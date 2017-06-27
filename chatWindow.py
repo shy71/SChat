@@ -4,12 +4,12 @@ from appJar import gui
 import threading
 
 class chatWin:
-	def __init__(self,pchat,username,peerUsername):#,username,ip,sharedKey,nounce,token
+	def __init__(self,pchat):#,username,ip,sharedKey,nounce,token
 		self.app2 = gui("Chat Window","400x400")
 		self.pchat = pchat
 		self.messages = []
-		self.username = username
-		self.peerUsername = peerUsername
+		self.username = self.pchat.suser
+		self.peerUsername = self.pchat.duser
 		self.msgCounter = 0
 		
 	def setMsgLabel(self,msgText,username):
