@@ -12,7 +12,7 @@ class chatWin:
 	def setMsgLabel(self,msgText):
 		self.msgCounter = msgCounter + 1
 		if msgCounter == 9:
-			msgText = [msgText.findfirstindex('\n') + 1:]
+			msgText = msgText[msgText.findfirstindex('\n') + 1:]
 			msgCounter = 8
 		self.app2.setLabel("chattext",msgText)	
 
@@ -40,7 +40,3 @@ class chatWin:
 		self.app2.addEntry("chat")
 		self.app2.addButton("Print",self.chatf)
 		self.app2.go()
-		
-
-window = chatWin()
-window.openWindow()

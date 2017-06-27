@@ -1,11 +1,11 @@
-from ClientChat import ClientChat
+from ClientChat import ClientChat,isRegister
 from SChatError import SChatError
 class ClientServer:
-	def __init__(self,server,username,isRegister):
+	def __init__(self,server,username):
 		self.server=server
 		self.help=ClientChat(server)
 		self.username=username
-		if not isRegister:
+		if not isRegister(self.username):
 			self._register()
 		self._connect()
 	def _register(self):
@@ -30,5 +30,5 @@ class ClientServer:
 		return self.help.handleMsg(resp) #dIp,sharedkey, nounce,token
 	def close(self):
 		self.server.close()
-	def getKey(self):
-		return self.help.loadKey(self.username)
+	#def getKey(self):
+	#	return self.help.loadKey(self.username)

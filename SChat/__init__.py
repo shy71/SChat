@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from ClientChat import ClientChat
+from ClientChat import isRegister
 from ClientServer import ClientServer
 from Connection import Connection
 from P2PChat import P2PChat

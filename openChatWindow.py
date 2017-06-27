@@ -19,9 +19,11 @@ class openChatWindow:
 		while True:
 			p = P2PChat(self.username)
 			p.waitForRequest()
-			if p.open = True:
-				cwindow = chatWindow(p)
-				cwindow.openWindow()
+			if p.open == True:
+				cwindow = chatWindow(p2p)
+				recv_thread = threading.Thread(target=cwindow.openWindow)
+				recv_thread.setDaemon(True)
+				recv_thread.start()
 				#openchatwindow with that user
 	def chatf(self,button):
 		cht = self.app2.getEntry("chat")
@@ -43,8 +45,9 @@ class openChatWindow:
 		self.app2.addButton("Open Chat",self.chatf,3,0)
 		self.app2.addVerticalSeparator(0,1,1,4, colour="red")
 		self.app2.addButton("Exit",self.exit,3,2)
-		self.app2.go()
 		recv_thread = threading.Thread(target=self.waitForChatPolling)
 		recv_thread.setDaemon(True)
 		recv_thread.start()
+		self.app2.go()
+
 		

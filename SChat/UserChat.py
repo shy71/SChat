@@ -1,5 +1,5 @@
 from AESCipher import AESCipher
-from SChatError import SChatError
+from SChatError import SChatError,toSChatError
 import binascii
 class UserChat:
 	def __init__(self,state):
@@ -8,7 +8,7 @@ class UserChat:
 		header=resp.split(';')[0]
 		if header=='e':
 			self.state='lead'
-			raise SChatError.toSChatError(resp.split(';')[1])
+			raise toSChatError(resp.split(';')[1])
 		if self.state=='syn':
 			self.handleOkResp(resp)
 		if self.state=='wait':

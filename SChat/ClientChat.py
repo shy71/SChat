@@ -2,7 +2,7 @@ from UserChat import UserChat
 from random import randint
 from AESCipher import AESCipher
 from time import time
-from SChatError import SChatError
+from SChatError import SChatError,toSChatError
 import re
 import binascii
 import os
@@ -11,6 +11,9 @@ LOCAL_USERS_FILE_PATH='localusers.data'
 def loadKey(username):
 	with open(LOCAL_USERS_FILE_PATH,'a+') as f:
 		return re.search('{'+username+';([a-z|0-9]+)}\n',f.read()).group(1)
+def isRegister(username):
+		with open(LOCAL_USERS_FILE_PATH,'a+') as f:
+			return re.search('{'+username+';([a-z|0-9]+)}\n',f.read()) != None
 class ClientChat:
 	def __init__(self,server):
 		self.server=server
