@@ -25,13 +25,16 @@ class openChatWindow:
 				#self.app2.topLevel.after(1,self.openChat(p))
 				while self.openingWin:
 					pass
-				self.incom.append(p)				
+				self.incom.append(p)
+				
+				#cwindow = chatWin(p,self.app2)
+				#cwindow.openWindow()				
 				#recv_thread = threading.Thread(target=cwindow.openWindow)
 				#recv_thread.setDaemon(True)
 				#recv_thread.start()
 				#openchatwindow with that user
 		except SChatError as er:
-			app.errorBox('Error!', er)
+			self.app2.errorBox('Error!', er)
 	def openChat(self,p):
 		cwindow = chatWin(p)
 		cwindow.openWindow()
@@ -43,7 +46,7 @@ class openChatWindow:
 		p=P2PChat(self.username) #<-need username
 		p.startChat(cht,dIp,5002,sharedkey,nounce,token)
 		p.LoadChat()
-		cwindow = chatWin(p)
+		cwindow = chatWin(p,self.app2)
 		cwindow.openWindow()
 	def exit(self,button):
 		self.app2.stop()
@@ -51,7 +54,7 @@ class openChatWindow:
 	def checkRequests(self):
 		self.openingWin=True
 		for item in self.incom:
-			cwindow = chatWin(item)
+			cwindow = chatWin(item,self.app2)
 			cwindow.openWindow()
 		self.incom=[]
 		self.openingWin=False

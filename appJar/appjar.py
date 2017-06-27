@@ -5732,8 +5732,10 @@ class gui(object):
             column=0,
             colspan=0,
             rowspan=0,
-            secret=False):
+            secret=False,list=None):
         ent = self.__buildEntry(title, self.__getContainer(), secret)
+        if list!=None:
+            list.append(ent)
         self.__positionWidget(ent, row, column, colspan, rowspan)
 
     def addValidationEntry(
