@@ -39,7 +39,6 @@ class openChatWindow:
 		self.app2.stop()
 	
 	def checkRequests(self):
-		print 'Checking'
 		self.openingWin=True
 		for item in self.incom:
 			cwindow = chatWin(item)

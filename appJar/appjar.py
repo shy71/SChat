@@ -1213,8 +1213,6 @@ class gui(object):
 
     def stop(self, event=None):
         """ Closes the GUI. If a stop function is set, will only close the GUI if True """
-        print(self.eventClose)
-        print('Stop')
         if self.eventClose:
 			self.eventClose()
         theFunc = self.__getTopLevel().stopFunction
