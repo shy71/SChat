@@ -11,7 +11,7 @@ class chatWin:
 		self.username = self.pchat.suser
 		self.peerUsername = self.pchat.duser
 		self.msgCounter = 0
-		
+		self.msgChanged=False
 	def setMsgLabel(self,msgText,local):
 		self.msgCounter = self.msgCounter + 1
 		self.messages.append(msgText)
@@ -25,8 +25,9 @@ class chatWin:
 			if local:
 				msg += '\n' +self.username+': '+ message
 			else:
-				msg +='\n'+ ' '*(400 - 12*len(message)) + self.peerUsername+': ' + message
-		self.app2.setLabel("chattext",msg)	
+				msg +='\n' + self.peerUsername+': ' + message #+ ' '*(400 - 12*len(message))
+		self.msg=msg
+		self.msgChanged=True
 
 	def chatf(self,button):
 		cht = self.app2.getEntry("chat")
@@ -47,6 +48,12 @@ class chatWin:
 	def sendExitMsg(self):
 		print 'exit'
 		self.pchat('!exit')
+	def updateMsg(self):
+		print 'Check'+str(self.msgChanged)
+		if self.msgChanged:
+			print self.msg
+			self.app2.setLabel("chattext",self.msg)	
+			self.msgChanged=False
 	def openWindow(self):
 		self.app2.setBg("orange")
 		self.app2.setFont(10)
@@ -59,4 +66,6 @@ class chatWin:
 		recv_thread = threading.Thread(target=self.updateChatPolling)
 		recv_thread.setDaemon(True)
 		recv_thread.start()
+		self.app2.setPollTime(200)
+		self.app2.registerEvent(self.updateMsg)
 		self.app2.go(None,None,self.sendExitMsg)
