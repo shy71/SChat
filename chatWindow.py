@@ -5,7 +5,7 @@ import threading
 
 class chatWin:
 	def __init__(self,pchat):#,username,ip,sharedKey,nounce,token
-		self.app2 = gui("Chat Window","400x200")
+		self.app2 = gui('Chat Win',"400x200")
 		self.pchat = pchat
 		self.msgCounter = 0
 	def setMsgLabel(self,msgText):
