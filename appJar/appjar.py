@@ -1121,7 +1121,7 @@ class gui(object):
 #####################################
 # Event Loop - must always be called at end
 #####################################
-    def go(self, language=None, startWindow=None):
+    def go(self, language=None, startWindow=None,whenClose=None):
         """ Most important function! Start the GUI """
 
         if self.splashConfig is not None:
@@ -1199,7 +1199,7 @@ class gui(object):
         try:
             self.topLevel.mainloop()
         except(KeyboardInterrupt, SystemExit):
-            self.stop()
+            self.stop(whenClose)
 
     def setStopFunction(self, function):
         """ set a function to call when the GUI is quit. Must return True or False """
@@ -1212,6 +1212,8 @@ class gui(object):
 
     def stop(self, event=None):
         """ Closes the GUI. If a stop function is set, will only close the GUI if True """
+        print(event)
+        print('Stop')
         theFunc = self.__getTopLevel().stopFunction
         if theFunc is None or theFunc():
             # stop the after loops

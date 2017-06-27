@@ -4,21 +4,32 @@ from appJar import gui
 import threading
 
 class chatWin:
-	def __init__(self,pchat):#,username,ip,sharedKey,nounce,token
-		self.app2 = gui('Chat Win',"400x200")
+	def __init__(self,pchat,username,peerUsername):#,username,ip,sharedKey,nounce,token
+		self.app2 = gui("Chat Window","400x400")
 		self.pchat = pchat
+		self.messages = []
+		self.username = username
+		self.peerUsername = peerUsername
 		self.msgCounter = 0
-	def setMsgLabel(self,msgText):
+		
+	def setMsgLabel(self,msgText,username):
 		self.msgCounter = self.msgCounter + 1
 		if self.msgCounter == 9:
-			msgText = msgText[msgText.findfirstindex('\n') + 1:]
+			msgList = messages[len(messages)-8:]
 			self.msgCounter = 8
-		self.app2.setLabel("chattext",msgText)	
+		else:
+			msgText = messages
+		for message in msgList:
+			if self.username == username:
+				msg = msg + '\n' + message
+			else:
+				msg = msg + '\n' + ' '*(400 - 12*len(message)) + message
+		self.app2.setLabel("chattext",msg)	
 
 	def chatf(self,button):
 		cht = self.app2.getEntry("chat")
-		msgText = self.app2.getLabel("chattext") + '\n' + cht
-		self.pchat.output(cht)
+		#msgText = self.app2.getLabel("chattext") + '\n' + cht
+		self.pchat.output(self.username + ': ' +cht,self.username)
 		self.setMsgLabel(msgText)
 		#make it change the stream and update the label here too
 		print cht
@@ -26,9 +37,14 @@ class chatWin:
 		while True:
 			msg = self.pchat.input()
 			if not msg == None:
-				self.setMsgLabel(self.app2.getLabel("chattext") + '\n' + msg)
+				self.setMsgLabel(self.peerUsername + ": " + msg,self.peerUsername)
+			#if msg=='!exit':
+					
 			 #get updated stream from method which shy will implement
 			#update the label 	
+	def sendExitMsg(self):
+		print 'exit'
+		self.pchat('!exit')
 	def openWindow(self):
 		self.app2.setBg("orange")
 		self.app2.setFont(10)
@@ -41,4 +57,4 @@ class chatWin:
 		recv_thread = threading.Thread(target=self.updateChatPolling)
 		recv_thread.setDaemon(True)
 		recv_thread.start()
-		self.app2.go()
+		self.app2.go(None,None,self.sendExitMsg)

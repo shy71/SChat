@@ -20,6 +20,8 @@ class openChatWindow:
 			p = P2PChat(self.username)
 			p.waitForRequest()
 			p.LoadChat()
+			while self.openingWin:
+				pass
 			self.incom.append(p)				
 			#recv_thread = threading.Thread(target=cwindow.openWindow)
 			#recv_thread.setDaemon(True)
@@ -36,11 +38,15 @@ class openChatWindow:
 	def exit(self,button):
 		self.app2.stop()
 	
-	def checkRequests(self,button):
+	def checkRequests(self):
+		print 'Checking'
+		self.openingWin=True
 		for item in self.incom:
 			cwindow = chatWin(item)
 			cwindow.openWindow()
-		item=[]
+		self.incom=[]
+		self.openingWin=False
+
 	
 	def openWindow(self):
 		self.app2.setBg("lightBlue")
@@ -53,10 +59,11 @@ class openChatWindow:
 		self.app2.addButton("Open Chat",self.chatf,3,0)
 		self.app2.addVerticalSeparator(0,1,1,4, colour="red")
 		self.app2.addButton("Exit",self.exit,3,2)
-		self.app2.addButton("Check Requests",self.checkRequests,2,2)
 		recv_thread = threading.Thread(target=self.waitForChatPolling)
 		recv_thread.setDaemon(True)
 		recv_thread.start()
+		self.app2.setPollTime(1000)
+		self.app2.registerEvent(self.checkRequests)
 		self.app2.go()
 	
 		
