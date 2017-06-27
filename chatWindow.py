@@ -67,7 +67,6 @@ class chatWin:
 			self.app2.whenClose=None
 			self.app2.hide()
 	def openWindow(self):
-		ef openWindow(self):
 		self.app2.setBg("lightGreen")
 		self.app2.setFont(10)
 		self.app2.setSticky("sew")
