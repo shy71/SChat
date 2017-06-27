@@ -23,7 +23,6 @@ class chatWin:
 			if msg=='!exit':
 				self.app2.topLevel.after(0,self.chatClose)
 	def chatClose(self):
-		print num
 		self.app2.errorBox('Chat close!', 'Chat has been closed by the other side!')
 		self.app2.hideWidget(self.app2.BUTTON,"Send")
 		self.app2.hideWidget(self.app2.ENTRY,"chat")
