@@ -22,6 +22,7 @@ class openChatWindow:
 				p = P2PChat(self.username)
 				p.waitForRequest()
 				p.LoadChat()
+				#self.app2.topLevel.after(1,self.openChat(p))
 				while self.openingWin:
 					pass
 				self.incom.append(p)				
@@ -31,9 +32,13 @@ class openChatWindow:
 				#openchatwindow with that user
 		except SChatError as er:
 			app.errorBox('Error!', er)
+	def openChat(self,p):
+		cwindow = chatWin(p)
+		cwindow.openWindow()
 	def chatf(self,button):
 		cht = self.app2.getEntry("chat")
 		self.app2.clearEntry("chat", False)
+		#subprocess.call(['python chatWindow.py '+self.server.], shell=True)
 		dIp,sharedkey, nounce,token= self.server.getInfo(cht)
 		p=P2PChat(self.username) #<-need username
 		p.startChat(cht,dIp,5002,sharedkey,nounce,token)

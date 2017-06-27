@@ -1,10 +1,13 @@
 from ClientChat import ClientChat,isRegister
 from SChatError import SChatError
 class ClientServer:
-	def __init__(self,server,username):
+	def __init__(self,server,username,isConnected=False):
 		self.server=server
 		self.help=ClientChat(server)
 		self.username=username
+		if isConnected:
+			self.state='connected'
+			return
 		if not isRegister(self.username):
 			self._register()
 		self._connect()

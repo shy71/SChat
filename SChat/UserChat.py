@@ -22,7 +22,7 @@ class UserChat:
 		try:
 			return binascii.unhexlify(AESCipher(serverKey).decrypt(resp.split(';')[1])).split(';') #username,sharedKey,nounce
 		except Exception as err:
-			raise SChatError('Invalid content in Hi request, problem with decryption! - '+str(er))
+			raise SChatError('Invalid content in Hi request, problem with decryption! - '+str(err))
 	def sendOkMsg(self,peer,nounce):
 		self.peer=peer
 		self.nounce=nounce

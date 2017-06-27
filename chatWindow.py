@@ -14,15 +14,16 @@ class chatWin:
 		cht = self.app2.getEntry("chat")
 		self.app2.clearEntry("chat", False)
 		self.pchat.output(cht)
-		self.app2.addListItem("list",self.username + ": " + cht)
+		self.app2.addListItem("list",time.strftime("%H:%M") + " " + self.username + ": " + cht)
 	def updateChatPolling(self):
 		while True:
 			msg = self.pchat.input()
 			if not msg == None:
-				self.app2.addListItem("list",self.peerUsername + ": " + msg)
+				self.app2.addListItem("list",time.strftime("%H:%M") + " " + self.peerUsername + ": " + msg)
 			if msg=='!exit':
 				self.app2.topLevel.after(0,self.chatClose)
 	def chatClose(self):
+		print num
 		self.app2.errorBox('Chat close!', 'Chat has been closed by the other side!')
 		self.app2.hideWidget(self.app2.BUTTON,"Send")
 		self.app2.hideWidget(self.app2.ENTRY,"chat")
@@ -47,3 +48,16 @@ class chatWin:
 			self.app2.go(None,None,self.sendExitMsg)
 		except SChatError as er:
 			self.app2.errorBox('Error!', er)
+			
+			
+#if len(sys.argv)<4:
+#	print 'Usage chatWindow.py <serverIp> <SUserName> <DUserName>'
+#username=sys.argv[2]
+#dusername=sys.argv[3]
+#server=ClientServer(ServerConnection(sys.argv[1],5000,None,'keys/key.pem'),username)
+#dIp,sharedkey, nounce,token= self.server.getInfo(dusername)
+#p=P2PChat(username) #<-need username
+#p.startChat(cht,dIp,5002,sharedkey,nounce,token)
+#p.LoadChat()
+#cwindow = chatWin(p)
+#cwindow.openWindow()
