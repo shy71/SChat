@@ -10,10 +10,10 @@ class chatWin:
 		self.msgCounter = 0
 		pass
 	def setMsgLabel(self,msgText):
-		self.msgCounter = msgCounter + 1
-		if msgCounter == 9:
+		self.msgCounter = self.msgCounter + 1
+		if self.msgCounter == 9:
 			msgText = msgText[msgText.findfirstindex('\n') + 1:]
-			msgCounter = 8
+			self.msgCounter = 8
 		self.app2.setLabel("chattext",msgText)	
 
 	def chatf(self,button):
