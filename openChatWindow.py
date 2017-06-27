@@ -19,6 +19,7 @@ class openChatWindow:
 		while True:
 			p = P2PChat(self.username)
 			p.waitForRequest()
+			p.LoadChat()
 			if p.open == True:
 				cwindow = chatWin(p)
 				cwindow.openWindow()
@@ -32,6 +33,8 @@ class openChatWindow:
 		p=P2PChat(self.username) #<-need username
 		p.startChat(cht,dIp,5002,sharedkey,nounce,token)
 		p.LoadChat()
+		cwindow = chatWin(p)
+		cwindow.openWindow()
 	def exit(self,button):
 		self.app2.stop()
 		
