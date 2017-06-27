@@ -40,7 +40,7 @@ class chatWin:
 	def chatf(self,button):
 		cht = self.app2.getEntry("chat")
 		#msgText = self.app2.getLabel("chattext") + '\n' + cht
-		self.pchat.output(self.username + ': ' +cht)
+		self.pchat.output(cht)
 		self.app2.addListItem("list",self.username + ": " + cht)
 		#make it change the stream and update the label here too
 		print cht
