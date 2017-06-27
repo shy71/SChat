@@ -70,7 +70,6 @@ class ClientChat:
 	def connect(self,username):
 		if self.state!='start':
 			raise SChatError('Can\'t send CONNECT request in the middle of a diffrent request')
-		self.nounce = randint(1, 65536)
 		key=loadKey(username)
 		self.server.aes = AESCipher(key)
 		self.username=username
