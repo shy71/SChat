@@ -13,7 +13,7 @@ from SChat import isRegister
 from SChat import SChatError
 import sys
 app = gui("Login Window", "500x200")
-app.setBg("orange")
+app.setBg("lightGreen")
 app.setFont(18)
 
 def checkUsername(username):	

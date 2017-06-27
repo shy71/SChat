@@ -1,6 +1,7 @@
 import sys
 import time
 from appJar import gui
+from SChat import SChatError
 import threading
 
 class chatWin:
@@ -11,32 +12,6 @@ class chatWin:
 		self.peerUsername = pchat.duser
 		self.msgChanged=False
 		self.exit=False
-	def showMessageListOnScreen(self,msgList):
-		msg1=''
-		msg2=''
-		for message in msgList:
-			if message.startswith(self.username):
-				msg2 += '\n'
-				msg1 += '\n' + message	
-			else:
-				msg2 += '\n' + message
-				msg1 += '\n'
-		self.msg1=msg1
-		self.msg2=msg2
-		self.msgChanged=True
-	def setMsgLabel(self,msgText,local):
-		self.msgCounter = self.msgCounter + 1
-		if local:
-			self.messages.append(self.username + ': ' + msgText)
-		else:
-			self.messages.append(self.peerUsername + ': ' + msgText)
-
-		if self.msgCounter == 9:
-			msgList = self.messages[len(self.messages)-8:]
-			self.msgCounter = 8
-		else:
-			msgList = self.messages
-		self.showMessageListOnScreen(msgList)
 	def chatf(self,button):
 		cht = self.app2.getEntry("chat")
 		#msgText = self.app2.getLabel("chattext") + '\n' + cht
@@ -58,26 +33,19 @@ class chatWin:
 			#update the label 	
 	def sendExitMsg(self):
 		self.pchat.output('!exit')
-	def updateMsg(self):
-		if self.msgChanged:
-			self.app2.setLabel("chattext1",self.msg1)
-			self.app2.setLabel("chattext2",self.msg2)	
-			self.msgChanged=False
-		if self.exit:
-			self.app2.whenClose=None
-			self.app2.hide()
 	def openWindow(self):
-		self.app2.setBg("lightGreen")
-		self.app2.setFont(10)
-		self.app2.setSticky("sew")
-		self.app2.setExpand("both")
-		self.app2.addListBox("list","")
-		self.app2.setExpand("s")
-		self.app2.addEntry("chat")
-		self.app2.addButton("Print",self.chatf)
-		recv_thread = threading.Thread(target=self.updateChatPolling)
-		recv_thread.setDaemon(True)
-		recv_thread.start()
-		self.app2.setPollTime(200)
-		self.app2.registerEvent(self.updateMsg)
-		self.app2.go(None,None,self.sendExitMsg)
+		try:
+			self.app2.setBg("lightGreen")
+			self.app2.setFont(10)
+			self.app2.setSticky("sew")
+			self.app2.setExpand("both")
+			self.app2.addListBox("list","")
+			self.app2.setExpand("s")
+			self.app2.addEntry("chat")
+			self.app2.addButton("Print",self.chatf)
+			recv_thread = threading.Thread(target=self.updateChatPolling)
+			recv_thread.setDaemon(True)
+			recv_thread.start()
+			self.app2.go(None,None,self.sendExitMsg)
+		except SChatError as er:
+			app.errorBox('Error!', er)

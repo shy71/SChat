@@ -1,6 +1,7 @@
 from SChat import ClientServer
 from M2Crypto import RSA 
 from SChat import ServerConnection
+from SChat import SChatError
 from random import randint
 from SChat import P2PChat
 from chatWindow import chatWin
@@ -16,17 +17,20 @@ class openChatWindow:
 		self.username = username
 		self.incom=[]
 	def waitForChatPolling(self):
-		while True:
-			p = P2PChat(self.username)
-			p.waitForRequest()
-			p.LoadChat()
-			while self.openingWin:
-				pass
-			self.incom.append(p)				
-			#recv_thread = threading.Thread(target=cwindow.openWindow)
-			#recv_thread.setDaemon(True)
-			#recv_thread.start()
-			#openchatwindow with that user
+		try:
+			while True:
+				p = P2PChat(self.username)
+				p.waitForRequest()
+				p.LoadChat()
+				while self.openingWin:
+					pass
+				self.incom.append(p)				
+				#recv_thread = threading.Thread(target=cwindow.openWindow)
+				#recv_thread.setDaemon(True)
+				#recv_thread.start()
+				#openchatwindow with that user
+		except SChatError as er:
+			app.errorBox('Error!', er)
 	def chatf(self,button):
 		cht = self.app2.getEntry("chat")
 		dIp,sharedkey, nounce,token= self.server.getInfo(cht)
@@ -48,21 +52,24 @@ class openChatWindow:
 
 	
 	def openWindow(self):
-		self.app2.setBg("lightBlue")
-		self.app2.setFont(14)
-		self.app2.setSticky("sewn")
-		self.app2.setExpand("both")
-		self.app2.addLabel("l1","Chat with:",0,0)
-		self.app2.addEntry("chat",1,0)
-		self.app2.addLabel("l2","",2,0)
-		self.app2.addButton("Open Chat",self.chatf,3,0)
-		self.app2.addVerticalSeparator(0,1,1,4, colour="red")
-		self.app2.addButton("Exit",self.exit,3,2)
-		recv_thread = threading.Thread(target=self.waitForChatPolling)
-		recv_thread.setDaemon(True)
-		recv_thread.start()
-		self.app2.setPollTime(1000)
-		self.app2.registerEvent(self.checkRequests)
-		self.app2.go()
+		try:
+			self.app2.setBg("lightGreen")
+			self.app2.setFont(14)
+			self.app2.setSticky("sewn")
+			self.app2.setExpand("both")
+			self.app2.addLabel("l1","Chat with:",0,0)
+			self.app2.addEntry("chat",1,0)
+			self.app2.addLabel("l2","",2,0)
+			self.app2.addButton("Open Chat",self.chatf,3,0)
+			self.app2.addVerticalSeparator(0,1,1,4, colour="red")
+			self.app2.addButton("Exit",self.exit,3,2)
+			recv_thread = threading.Thread(target=self.waitForChatPolling)
+			recv_thread.setDaemon(True)
+			recv_thread.start()
+			self.app2.setPollTime(1000)
+			self.app2.registerEvent(self.checkRequests)
+			self.app2.go()
+		except SChatError as er:
+			app.errorBox('Error!', er)
 	
 		
