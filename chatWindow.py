@@ -12,6 +12,7 @@ class chatWin:
 		self.peerUsername = self.pchat.duser
 		self.msgCounter = 0
 		self.msgChanged=False
+		self.exit=False
 	def setMsgLabel(self,msgText,local):
 		self.msgCounter = self.msgCounter + 1
 		self.messages.append(msgText)
@@ -28,6 +29,7 @@ class chatWin:
 				msg +='\n' + self.peerUsername+': ' + message #+ ' '*(400 - 12*len(message))
 		self.msg=msg
 		self.msgChanged=True
+		self.exit=True
 
 	def chatf(self,button):
 		cht = self.app2.getEntry("chat")
@@ -46,14 +48,14 @@ class chatWin:
 			 #get updated stream from method which shy will implement
 			#update the label 	
 	def sendExitMsg(self):
-		print 'exit'
-		self.pchat('!exit')
+		self.pchat.output('!exit')
 	def updateMsg(self):
-		print 'Check'+str(self.msgChanged)
 		if self.msgChanged:
-			print self.msg
 			self.app2.setLabel("chattext",self.msg)	
 			self.msgChanged=False
+		if self.exit:
+			self.app2.whenClose=None
+			self.app2.close()
 	def openWindow(self):
 		self.app2.setBg("orange")
 		self.app2.setFont(10)

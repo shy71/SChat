@@ -1123,7 +1123,8 @@ class gui(object):
 #####################################
     def go(self, language=None, startWindow=None,whenClose=None):
         """ Most important function! Start the GUI """
-
+        print(whenClose)
+        self.eventClose=whenClose
         if self.splashConfig is not None:
             splash = SplashScreen(
                             self.topLevel,
@@ -1199,7 +1200,7 @@ class gui(object):
         try:
             self.topLevel.mainloop()
         except(KeyboardInterrupt, SystemExit):
-            self.stop(whenClose)
+            self.stop()
 
     def setStopFunction(self, function):
         """ set a function to call when the GUI is quit. Must return True or False """
@@ -1212,8 +1213,10 @@ class gui(object):
 
     def stop(self, event=None):
         """ Closes the GUI. If a stop function is set, will only close the GUI if True """
-        print(event)
+        print(self.eventClose)
         print('Stop')
+        if self.eventClose:
+			self.eventClose()
         theFunc = self.__getTopLevel().stopFunction
         if theFunc is None or theFunc():
             # stop the after loops
