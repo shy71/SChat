@@ -1,14 +1,13 @@
 import sys
 import time
-sys.path.append("../../")
 from appJar import gui
+import threading
 
 class chatWin:
 	def __init__(self,pchat):#,username,ip,sharedKey,nounce,token
-		self.app2 = gui("Login Window","400x200")
+		self.app2 = gui("Chat Window","400x200")
 		self.pchat = pchat
 		self.msgCounter = 0
-		pass
 	def setMsgLabel(self,msgText):
 		self.msgCounter = self.msgCounter + 1
 		if self.msgCounter == 9:
@@ -23,7 +22,7 @@ class chatWin:
 		self.setMsgLabel(msgText)
 		#make it change the stream and update the label here too
 		print cht
-	def updateChatPolling():
+	def updateChatPolling(self):
 		while True:
 			msg = self.pchat.input()
 			if not msg == None:
@@ -39,4 +38,7 @@ class chatWin:
 		self.app2.setExpand("s")
 		self.app2.addEntry("chat")
 		self.app2.addButton("Print",self.chatf)
+		recv_thread = threading.Thread(target=self.updateChatPolling)
+		recv_thread.setDaemon(True)
+		recv_thread.start()
 		self.app2.go()
