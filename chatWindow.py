@@ -7,11 +7,8 @@ class chatWin:
 	def __init__(self,pchat):#,username,ip,sharedKey,nounce,token
 		self.app2 = gui("Chat Window","400x400")
 		self.pchat = pchat
-		self.messages = []
-		self.fromBottom = 0
-		self.username = self.pchat.suser
-		self.peerUsername = self.pchat.duser
-		self.msgCounter = 0
+		self.username = username
+		self.peerUsername = peerUsername
 		self.msgChanged=False
 		self.exit=False
 	def showMessageListOnScreen(self,msgList):
@@ -43,14 +40,17 @@ class chatWin:
 	def chatf(self,button):
 		cht = self.app2.getEntry("chat")
 		#msgText = self.app2.getLabel("chattext") + '\n' + cht
-		self.pchat.output(cht)
-		self.setMsgLabel(cht,True)
+		self.pchat.output(self.username + ': ' +cht,self.username)
+		self.addListItem("list",self.username + ": " + msg)
 		#make it change the stream and update the label here too
+		print cht
 	def updateChatPolling(self):
 		while True:
 			msg = self.pchat.input()
 			if not msg == None:
-				self.setMsgLabel(msg,False)
+				self.addListItem("list",self.peerUsername + ": " + msg)
+			#get updated stream from method which shy will implement
+			#update the label 
 			if msg=='!exit':
 				self.exit=True
 					
@@ -66,33 +66,16 @@ class chatWin:
 		if self.exit:
 			self.app2.whenClose=None
 			self.app2.hide()
-	def createShowedMessagesList(self):
-		return self.messages[len(self.messages) - 8 - self.fromBottom : len(self.messages) - self.fromBottom]
-		
-	def goUp(self,button):		
-		if self.fromBottom < len(self.messages):
-			self.fromBottom += 1			
-			self.showMessageListOnScreen(self.createShowedMessagesList())
-
-	def goDown(self,button):
-		if self.fromBottom > 0:
-			self.fromBottom -= 1
-			self.showMessageListOnScreen(self.createShowedMessagesList())
-
 	def openWindow(self):
-		self.app2.setBg("orange")
+		ef openWindow(self):
+		self.app2.setBg("lightGreen")
 		self.app2.setFont(10)
-		self.app2.setSticky("n")
-		self.app2.addLabel("peername",self.peerUsername,0,0)
 		self.app2.setSticky("sew")
 		self.app2.setExpand("both")
-		self.app2.addLabel("chattext1","",0,0)
-		self.app2.addLabel("chattext2","",0,0)
+		self.app2.addListBox("list","")
 		self.app2.setExpand("s")
-		self.app2.addButton("up",self.goUp,1,0,2)
-		self.app2.addButton("down",self.goDown,1,1,2)
-		self.app2.addEntry("chat",2,0,2)
-		self.app2.addButton("Print",self.chatf,3,0,2)
+		self.app2.addEntry("chat")
+		self.app2.addButton("Print",self.chatf)
 		recv_thread = threading.Thread(target=self.updateChatPolling)
 		recv_thread.setDaemon(True)
 		recv_thread.start()

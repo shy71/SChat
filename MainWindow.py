@@ -9,8 +9,8 @@ from SChat import ClientServer
 from M2Crypto import RSA 
 from SChat import ServerConnection
 from random import randint
-from SChat import P2PChat
 from SChat import isRegister
+from SChat import SChatError
 import sys
 app = gui("Login Window", "500x200")
 app.setBg("orange")
@@ -24,15 +24,19 @@ def checkUsername(username):
 	return True,ClientServer(ServerConnection(server,5000,None,'keys/key.pem'),username)
 
 def press(button):
-	if button == "Cancel":
-		app.stop()
-	else:
-		usr = app.getEntry("Username")
-		check,c = checkUsername(usr)
-		if check:
-			window = openChatWindow(c,usr)
-			window.openWindow()
+	try:
+		if button == "Cancel":
 			app.stop()
+		else:
+			usr = app.getEntry("Username")
+			check,c = checkUsername(usr)
+			if check:
+				window = openChatWindow(c,usr)
+				window.openWindow()
+				app.stop()
+	except SChatError as er:
+		app.errorBox('Error!', er)
+
 if len(sys.argv)<2:
 	print 'Usage MainWindow.py <serverIp>'
 server=sys.argv[1]

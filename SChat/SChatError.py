@@ -1,6 +1,6 @@
 from SChat import ServerError
 def toSChatError(serverError):
-	return SChatError('Server Error: '+ServerError.errorsStr[int(serverError)])
+	return SChatError('Server Error: '+ServerError.ServerError(int(serverError)))
 class SChatError(Exception):
 	def __init__(self,msg):
 		self.msg=msg
