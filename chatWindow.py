@@ -12,32 +12,34 @@ class chatWin:
 		self.peerUsername = self.pchat.duser
 		self.msgCounter = 0
 		
-	def setMsgLabel(self,msgText,username):
+	def setMsgLabel(self,msgText,local):
 		self.msgCounter = self.msgCounter + 1
+		self.messages.append(msgText)
 		if self.msgCounter == 9:
-			msgList = messages[len(messages)-8:]
+			msgList = self.messages[len(self.messages)-8:]
 			self.msgCounter = 8
 		else:
-			msgText = messages
+			msgList = self.messages
+		msg=''
 		for message in msgList:
-			if self.username == username:
-				msg = msg + '\n' + message
+			if local:
+				msg += '\n' +self.username+': '+ message
 			else:
-				msg = msg + '\n' + ' '*(400 - 12*len(message)) + message
+				msg +='\n'+ ' '*(400 - 12*len(message)) + self.peerUsername+': ' + message
 		self.app2.setLabel("chattext",msg)	
 
 	def chatf(self,button):
 		cht = self.app2.getEntry("chat")
 		#msgText = self.app2.getLabel("chattext") + '\n' + cht
-		self.pchat.output(self.username + ': ' +cht,self.username)
-		self.setMsgLabel(msgText)
+		self.pchat.output(cht)
+		self.setMsgLabel(cht,True)
 		#make it change the stream and update the label here too
 		print cht
 	def updateChatPolling(self):
 		while True:
 			msg = self.pchat.input()
 			if not msg == None:
-				self.setMsgLabel(self.peerUsername + ": " + msg,self.peerUsername)
+				self.setMsgLabel(msg,False)
 			#if msg=='!exit':
 					
 			 #get updated stream from method which shy will implement
