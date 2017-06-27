@@ -1123,7 +1123,6 @@ class gui(object):
 #####################################
     def go(self, language=None, startWindow=None,whenClose=None):
         """ Most important function! Start the GUI """
-        print(whenClose)
         self.eventClose=whenClose
         if self.splashConfig is not None:
             splash = SplashScreen(

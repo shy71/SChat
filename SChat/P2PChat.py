@@ -31,7 +31,6 @@ class P2PChat:
 		self.help.handleMsg(resp)
 		self.socket.startChat()
 		self.open=True
-		print 'Chat Up'
 	def waitForRequest(self):
 		inCon=Connection('0.0.0.0',0)
 		inCon.bind(5002,None)

@@ -33,6 +33,7 @@ class openChatWindow:
 			app.errorBox('Error!', er)
 	def chatf(self,button):
 		cht = self.app2.getEntry("chat")
+		self.app2.clearEntry("chat", False)
 		dIp,sharedkey, nounce,token= self.server.getInfo(cht)
 		p=P2PChat(self.username) #<-need username
 		p.startChat(cht,dIp,5002,sharedkey,nounce,token)
@@ -63,6 +64,7 @@ class openChatWindow:
 			self.app2.addButton("Open Chat",self.chatf,3,0)
 			self.app2.addVerticalSeparator(0,1,1,4, colour="red")
 			self.app2.addButton("Exit",self.exit,3,2)
+			self.app2.enableEnter(self.chatf)
 			recv_thread = threading.Thread(target=self.waitForChatPolling)
 			recv_thread.setDaemon(True)
 			recv_thread.start()
