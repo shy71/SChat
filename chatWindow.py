@@ -7,8 +7,8 @@ class chatWin:
 	def __init__(self,pchat):#,username,ip,sharedKey,nounce,token
 		self.app2 = gui("Chat Window","400x400")
 		self.pchat = pchat
-		self.username = username
-		self.peerUsername = peerUsername
+		self.username = pchat.suser
+		self.peerUsername = pchat.duser
 		self.msgChanged=False
 		self.exit=False
 	def showMessageListOnScreen(self,msgList):
