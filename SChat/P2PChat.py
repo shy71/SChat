@@ -93,7 +93,7 @@ class P2PChat:
 	def closeChat(self):
 		self.open=False
 		self.socket.close()
-		raise SChatError('Chat has been closed!')
+		#raise SChatError('Chat has been closed!')
 
 	
 		
