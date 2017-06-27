@@ -20,10 +20,11 @@ class openChatWindow:
 			p = P2PChat(self.username)
 			p.waitForRequest()
 			if p.open == True:
-				cwindow = chatWindow(p2p)
-				recv_thread = threading.Thread(target=cwindow.openWindow)
-				recv_thread.setDaemon(True)
-				recv_thread.start()
+				cwindow = chatWin(p)
+				cwindow.openWindow()
+				#recv_thread = threading.Thread(target=cwindow.openWindow)
+				#recv_thread.setDaemon(True)
+				#recv_thread.start()
 				#openchatwindow with that user
 	def chatf(self,button):
 		cht = self.app2.getEntry("chat")
