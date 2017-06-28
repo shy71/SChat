@@ -26,15 +26,14 @@ class UserChat:
 			raise SChatError('Got invalid msg(header) while in \'wait\' state!')
 		try:
 			token,self.encData=resp.split(';')[1:]
-			print resp
 			return binascii.unhexlify(AESCipher(serverKey).decrypt(token)).split(';') #username,sharedKey
 		except Exception as err:
 			raise SChatError('Invalid content in Hi request, problem with decryption! - '+str(err))
 	def sendOkMsg(self,peer):
 		self.peer=peer
-		#self.dh.genKey(int(self.peer.aes.decrypt(self.encDHKey)))
 		dhKey,self.nounce=self.peer.aes.decrypt(self.encData).split(';')
 		self.peer.send('o;' + self.peer.aes.encrypt(self.nounce+';'+str(self.dh.publicKey)))#+';'+str(peer.sport)))
+		self.dh.genKey(int(dhKey))
 		self.peer.aes=AESCipher(binascii.hexlify(self.dh.getKey()))
 		self.state='okSent'	
 	def handleGrResp(self,resp):
