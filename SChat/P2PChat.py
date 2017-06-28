@@ -25,10 +25,10 @@ class P2PChat:
 		self.duser,sharedKey,nounce=self.help.handleSynReq(msg,loadKey(self.suser))
 		self.socket=P2PConnection(ip,port,sharedKey)
 		self.help.sendOkMsg(self.socket,nounce)
-		responded,resp=self.socket.tryRecv()
+		responded,resp=self.socket.tryRecvfrom()
 		if not responded:
 			raise SChatError('Peer didn\'t responded in the middle of setting up the chat(Ok msg) - '+str(resp))
-		self.help.handleMsg(resp)
+		self.help.handleOkResp(resp)
 		self.socket.startChat()
 		self.open=True
 	def waitForRequest(self):

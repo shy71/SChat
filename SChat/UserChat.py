@@ -30,7 +30,7 @@ class UserChat:
 	def sendOkMsg(self,peer,nounce):
 		self.peer=peer
 		self.nounce=nounce
-		self.peer.send('o;' + self.peer.aes.encrypt(nounce+';'+str(self.dh.publicKey)+';'+str(peer.sport)))
+		self.peer.send('o;' + self.peer.aes.encrypt(nounce+';'+str(self.dh.publicKey)))#+';'+str(peer.sport)))
 		self.dh.genKey(int(self.peer.aes.decrypt(self.encDHKey)))
 		self.peer.aes=AESCipher(binascii.hexlify(self.dh.getKey()))
 		self.state='okSent'	
@@ -48,13 +48,14 @@ class UserChat:
 			return self.peer.aes.decrypt(msg)
 		except Exception as er:
 			raise SChatError('Invalid msg, can\'t decrypt the data, maybe wrong key or unauthorized source! - '+str(er))
-	def handleOkResp(self,resp):
+	def handleOkResp(self,respAddr):
+		resp=respAddr[0]
+		addr=respAddr[1]
 		header=resp.split(';')[0]
 		if header!='o':
 			raise SChatError('Got invalid msg(header) while in \'syn\' state!')
-		nounce,DHKey,port=self.decryptAes(resp.split(';')[1]).split(';')
-		self.peer.changePort(int(port))
-		self.peer.port=int(port)
+		nounce,DHKey=self.decryptAes(resp.split(';')[1]).split(';')
+		self.peer.changePort(addr[1])
 		self.dh.genKey(int(DHKey))
 		self.peer.aes=AESCipher(binascii.hexlify(self.dh.getKey()))
 		if nounce != self.nounce:

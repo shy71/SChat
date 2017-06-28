@@ -30,6 +30,13 @@ class Connection:
 			return True,self.recv()
 		except Exception as er:
 			return False,er
+	def tryRecvfrom(self):
+		try:
+			#a=self.recv()
+			#print 'R -'+a
+			return True,self.recvfrom()
+		except Exception as er:
+			return False,er
 	def recvfrom(self):
 		return self.socket.recvfrom(4096)
 	def changePort(self,port):
