@@ -12,7 +12,7 @@ class Connection:
 		self.sip=self.socket.getsockname()[0]
 		self.sport=self.socket.getsockname()[1]
 	def send(self,msg):
-		#print 'S -'+msg
+		print 'S -'+msg+' - '+str(self.port)
 		self.sendto(msg,(self.ip,self.port))
 	def sendto(self,msg,addr):
 		self.socket.sendto(msg,addr)
