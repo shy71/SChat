@@ -93,7 +93,7 @@ class ClientChat:
 		subHeader=data.split(';')[0]
 		if subHeader!='m':
 			raise SChatError('Got invalid msg(subHeader) while in \'infoReqSent\' state!')
-		nounce = data.split(';')[3]
+		nounce = data.split(';')[4]
 		if nounce!=self.nounce:
 			raise SChatError('Received nounce sent back by the server isn\'t compatible with the\n nounce number sent originally by you... \nYou may be under attack if this error continue to apper!')
 		del self.nounce

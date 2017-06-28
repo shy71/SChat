@@ -114,7 +114,6 @@ class SChatServer:
 		token=srcUser+';'+sharedKey#+';'+str(nounce)
 		encToken=self.encrypForUser(desUser,token) 
 			#raise Exception(encrypForUser(userName,'Error - User '+desUser+' not connected'))
-		self.sendSucess(addr,srcUser,'m;'+self.usersIp[desUser]+';'+sharedKey+';'+nounce+';'+encToken)
-		
+		self.sendSucess(addr,srcUser,'m;'+self.usersIp[desUser]+';'+sharedKey+';'+encToken+';'+nounce)		
 	def genAes(self):
 		return binascii.hexlify(os.urandom(32))

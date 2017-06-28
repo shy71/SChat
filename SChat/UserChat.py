@@ -26,6 +26,7 @@ class UserChat:
 			raise SChatError('Got invalid msg(header) while in \'wait\' state!')
 		try:
 			token,self.encData=resp.split(';')[1:]
+			print resp
 			return binascii.unhexlify(AESCipher(serverKey).decrypt(token)).split(';') #username,sharedKey
 		except Exception as err:
 			raise SChatError('Invalid content in Hi request, problem with decryption! - '+str(err))

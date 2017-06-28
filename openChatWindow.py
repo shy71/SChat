@@ -17,24 +17,25 @@ class openChatWindow:
 		self.username = username
 		self.incom=[]
 	def waitForChatPolling(self):
-		try:
-			while True:
-				p = P2PChat(self.username)
-				p.waitForRequest()
-				p.LoadChat()
-				#self.app2.topLevel.after(1,self.openChat(p))
-				while self.openingWin:
-					pass
-				self.incom.append(p)
-				
-				#cwindow = chatWin(p,self.app2)
-				#cwindow.openWindow()				
-				#recv_thread = threading.Thread(target=cwindow.openWindow)
-				#recv_thread.setDaemon(True)
-				#recv_thread.start()
-				#openchatwindow with that user
-		except SChatError as er:
-			self.app2.errorBox('Error!', er)
+		#try:
+		while True:
+			p = P2PChat(self.username)
+			p.waitForRequest()
+			p.LoadChat()
+			#self.app2.topLevel.after(1,self.openChat(p))
+			while self.openingWin:
+				pass
+			self.incom.append(p)
+			
+			#cwindow = chatWin(p,self.app2)
+			#cwindow.openWindow()				
+			#recv_thread = threading.Thread(target=cwindow.openWindow)
+			#recv_thread.setDaemon(True)
+			#recv_thread.start()
+			#openchatwindow with that user
+		#except SChatError as er:
+		#	raise er
+			#self.app2.errorBox('Error!', er)
 	def openChat(self,p):
 		cwindow = chatWin(p)
 		cwindow.openWindow()
