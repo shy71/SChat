@@ -17,7 +17,7 @@ class UserChat:
 			#self.handleSynReq(resp)
 			raise SChatError('Unknown Error')
 		if self.state=='okSent':
-			raise SChatError('Unknown Error')
+			self.handleGrResp(resp)
 
 	def handleSynReq(self,resp,serverKey):
 		header=resp.split(';')[0]
@@ -56,7 +56,6 @@ class UserChat:
 		if header!='o':
 			raise SChatError('Got invalid msg(header) while in \'syn\' state!')
 		nounce,DHKey=self.decryptAes(resp.split(';')[1]).split(';')
-		print addr[1]
 		self.peer.changePort(addr[1])
 		self.dh.genKey(int(DHKey))
 		self.peer.aes=AESCipher(binascii.hexlify(self.dh.getKey()))
