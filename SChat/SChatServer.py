@@ -76,10 +76,11 @@ class SChatServer:
 				#userOnline(userName,addr)
 				self.sendConfirmation(addr,userName,nounce)
 			elif header=='m':
-				srcUser,desUser,nounce=dMsg.split(';')[1:]
+				srcUser,encPart=dMsg.split(';')[1:]
 				print 'Got Requset for details - ' + srcUser+ ' -> '+ desUser
 				if srcUser not in self.usersIp:
 					self.sendError(addr,'31')
+				desUser,nounce=self.decrypForUser(srcUser,encPart).split(';')
 				newKey=self.genAes()
 				self.sendInfo(addr,srcUser,desUser,nounce,newKey)
 			elif header=='c':

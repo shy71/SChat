@@ -108,4 +108,4 @@ class ClientChat:
 	
 	def _buildInfoMsg(self,username):
 		self.nounce = str(randint(1, 65536))
-		return 'm;' + self.username + ';' + username + ';' + self.nounce
+		return 'm;' + self.username + ';'+self.server.aes.encrypt(username + ';' + self.nounce)
