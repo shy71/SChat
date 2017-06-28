@@ -21,17 +21,6 @@ import hashlib
 import random
 from binascii import hexlify # For debug output
 
-# If a secure random number generator is unavailable, exit with an error.
-try:
-	import ssl
-	random_function = ssl.RAND_bytes
-	random_provider = "Python SSL"
-except (AttributeError, ImportError):
-	pass
-	#import OpenSSL
-	#random_function = OpenSSL.rand.bytes
-	#random_provider = "OpenSSL"
-
 class DiffieHellman(object):
 	"""
 	A reference implementation of the Diffie-Hellman protocol.
@@ -98,14 +87,9 @@ class DiffieHellman(object):
 		_rand = 0
 		_bytes = bits // 8 + 8
 
-		while(_rand.bit_length() < bits):
-			try:
-				# Python 3
-				_rand = int.from_bytes(random_function(_bytes), byteorder='big')
-			except:
-				# Python 2
-				r=random.SystemRandom()
-				_rand =r.getrandbits(_bytes*8)
+		# Python 2
+		r=random.SystemRandom()
+		_rand =r.getrandbits(_bytes*8)
 
 		return _rand
 
