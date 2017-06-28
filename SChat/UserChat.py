@@ -55,7 +55,7 @@ class UserChat:
 		nounce,DHKey,port=self.decryptAes(resp.split(';')[1]).split(';')
 		self.peer.changePort(int(port))
 		self.peer.port=int(port)
-		self.dh.genKey(DHKey)
+		self.dh.genKey(int(DHKey))
 		print self.dh.getKey()
 		if nounce != self.nounce:
 			raise SChatError('Received nounce sent back by the server isn\'t compatible with the\n nounce number sent originally by you... \nYou may be under attack if this error continue to apper!')
@@ -67,7 +67,7 @@ class UserChat:
 		self.peer=peer
 		if self.state!='lead':
 			raise SChatError('Can\'t start chat without getting info from the server about the unknown user!')
-		self.peer.send('h;'+token+';'+self.peer.aes.encrypt(self.dh.publicKey))
+		self.peer.send('h;'+token+';'+self.peer.aes.encrypt(str(self.dh.publicKey)))
 		self.nounce=nounce
 		self.state='syn'
 	

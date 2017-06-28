@@ -18,6 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 import hashlib
+import random
 from binascii import hexlify # For debug output
 
 # If a secure random number generator is unavailable, exit with an error.
@@ -103,7 +104,8 @@ class DiffieHellman(object):
 				_rand = int.from_bytes(random_function(_bytes), byteorder='big')
 			except:
 				# Python 2
-				_rand = int(OpenSSL.rand.bytes(_bytes).encode('hex'), 16)
+				r=random.SystemRandom()
+				_rand =r.getrandbits(_bytes*8)
 
 		return _rand
 

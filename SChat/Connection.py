@@ -31,7 +31,7 @@ class Connection:
 		except Exception as er:
 			return False,er
 	def recvfrom(self):
-		return self.socket.recvfrom(2048)
+		return self.socket.recvfrom(4096)
 	def changePort(self,port):
 		self.port=port
 	def getaddr(self):
