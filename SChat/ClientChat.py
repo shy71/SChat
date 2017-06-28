@@ -98,7 +98,7 @@ class ClientChat:
 			raise SChatError('Received nounce sent back by the server isn\'t compatible with the\n nounce number sent originally by you... \nYou may be under attack if this error continue to apper!')
 		del self.nounce
 		self.state = 'connected'
-		return data.split(';')[1:]
+		return data.split(';')[1:-1]
 
 	def isConnected(self):
 		if time()-self.ctime<21600:

@@ -111,7 +111,7 @@ class SChatServer:
 		if time()-self.usersConnectTime[srcUser]>21600:
 			del self.usersIp[desUser]
 			del self.usersConnectTime[desUser]
-		token=srcUser+';'+sharedKey+';'+str(nounce)
+		token=srcUser+';'+sharedKey#+';'+str(nounce)
 		encToken=self.encrypForUser(desUser,token) 
 			#raise Exception(encrypForUser(userName,'Error - User '+desUser+' not connected'))
 		self.sendSucess(addr,srcUser,'m;'+self.usersIp[desUser]+';'+sharedKey+';'+nounce+';'+encToken)

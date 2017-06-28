@@ -30,7 +30,7 @@ class ClientServer:
 		responded,resp=self.server.tryRecv()
 		if not responded:
 			raise SChatError('Server didn\'t responded in the start of the Get Info request - '+str(resp)) 
-		return self.help.handleMsg(resp) #dIp,sharedkey, nounce,token
+		return self.help.handleMsg(resp) #dIp,sharedkey,token
 	def close(self):
 		self.server.close()
 	#def getKey(self):

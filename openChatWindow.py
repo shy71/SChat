@@ -39,15 +39,18 @@ class openChatWindow:
 		cwindow = chatWin(p)
 		cwindow.openWindow()
 	def chatf(self,button):
-		cht = self.app2.getEntry("chat")
-		self.app2.clearEntry("chat", False)
-		#subprocess.call(['python chatWindow.py '+self.server.], shell=True)
-		dIp,sharedkey, nounce,token= self.server.getInfo(cht)
-		p=P2PChat(self.username) #<-need username
-		p.startChat(cht,dIp,5002,sharedkey,nounce,token)
-		p.LoadChat()
-		cwindow = chatWin(p,self.app2)
-		cwindow.openWindow()
+		try:
+			cht = self.app2.getEntry("chat")
+			self.app2.clearEntry("chat", False)
+			#subprocess.call(['python chatWindow.py '+self.server.], shell=True)
+			dIp,sharedkey,token= self.server.getInfo(cht)
+			p=P2PChat(self.username) #<-need username
+			p.startChat(cht,dIp,5002,sharedkey,token)
+			p.LoadChat()
+			cwindow = chatWin(p,self.app2)
+			cwindow.openWindow()
+		except SChatError as er:
+			self.app2.errorBox('Error!', er)
 	def exit(self,button):
 		self.app2.stop()
 	
@@ -80,6 +83,6 @@ class openChatWindow:
 			self.app2.registerEvent(self.checkRequests)
 			self.app2.go()
 		except SChatError as er:
-			app.errorBox('Error!', er)
+			self.app2.errorBox('Error!', er)
 	
 		

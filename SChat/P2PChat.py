@@ -8,10 +8,10 @@ class P2PChat:
 	def __init__(self,sUser):#,username,ip,sharedKey,nounce,token
 		self.suser=sUser
 		self.inputlist=[]
-	def startChat(self,duser,ip,port,sharedKey,nounce,token):#why need username?
+	def startChat(self,duser,ip,port,sharedKey,token):#why need username?
 		self.socket=P2PConnection(ip,port,sharedKey)
 		self.help=UserChat('lead')
-		self.help.sendSyn(self.socket,nounce,token)
+		self.help.sendSyn(self.socket,token)
 		responded,resp=self.socket.tryRecvfrom()
 		if not responded:
 			raise SChatError('Peer didn\'t responded in the start of setting up the chat(Hi msg) - '+str(resp)) 
@@ -22,9 +22,9 @@ class P2PChat:
 		self.open=True
 	def gotChatRequest(self,ip,port,msg):
 		self.help=UserChat('wait')
-		self.duser,sharedKey,nounce=self.help.handleSynReq(msg,loadKey(self.suser))
+		self.duser,sharedKey=self.help.handleSynReq(msg,loadKey(self.suser))
 		self.socket=P2PConnection(ip,port,sharedKey)
-		self.help.sendOkMsg(self.socket,nounce)
+		self.help.sendOkMsg(self.socket)
 		responded,resp=self.socket.tryRecv()
 		if not responded:
 			raise SChatError('Peer didn\'t responded in the middle of setting up the chat(Ok msg) - '+str(resp))
