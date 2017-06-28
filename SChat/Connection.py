@@ -22,7 +22,7 @@ class Connection:
 	def recv(self):
 		#a=self.socket.recv(2048)
 		#print 'R -'+a
-		return self.socket.recv(2048)
+		return self.socket.recv(4096)
 	def tryRecv(self):
 		try:
 			#a=self.recv()

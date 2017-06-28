@@ -31,7 +31,7 @@ class UserChat:
 		self.peer=peer
 		self.nounce=nounce
 		self.dh.genKey(int(self.peer.aes.decrypt(self.encDHKey)))
-		print self.dh.getKey()
+		print binascii.hexlify(self.dh.getKey())
 		self.peer.send('o;' + self.peer.aes.encrypt(nounce+';'+str(self.dh.publicKey)+';'+str(peer.sport)))
 		self.state='okSent'	
 	def handleGrResp(self,resp):
@@ -56,7 +56,7 @@ class UserChat:
 		self.peer.changePort(int(port))
 		self.peer.port=int(port)
 		self.dh.genKey(int(DHKey))
-		print self.dh.getKey()
+		print binascii.hexlify(self.dh.getKey())
 		if nounce != self.nounce:
 			raise SChatError('Received nounce sent back by the server isn\'t compatible with the\n nounce number sent originally by you... \nYou may be under attack if this error continue to apper!')
 		self.peer.send('g;' + self.peer.aes.encrypt(str(int(self.nounce) + 1)))
