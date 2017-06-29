@@ -48,7 +48,7 @@ class SChatMainGUI:
 	
 if __name__=='__main__':
 	print '##This is test and development way of runing'
-	print '##For relese purposes Hardcode static Server Ip into runClientGui.py and have the users run that file'
+	print '##For release purposes Hardcode static Server Ip into runClientGui.py and have the users run that file'
 	if len(sys.argv)<2:
 		print 'Usage MainWindow.py <serverIp>'
 	main=SChatMainGUI(sys.argv[1])

@@ -1,0 +1,11 @@
+Manifest:
+
+appJar - Directory - The GUI moudle our SChat Gui uses
+keys - Directory - The directory where you can put your keys(you can use ours for the testing, but it is not secrue for release)
+SChat - Directory -The SChat Moudle, including the GUI
+loaclusers.data -The user side database of the users that were register in this computer
+users.data - The Server database of users
+runServer.py - Script for running the server (Python 2.7)
+runClientGUI.py - Script for running the Client GUI (Python 2.7) #<- You need to update the server IP before running it!
+"SChat – A Secure Chat.pptx" - A presentation on SChat
+Manifest.txt - The Manifest you are now reading
