@@ -11,3 +11,6 @@ from UserChat import UserChat
 from SChatServer import SChatServer
 from SChatError import SChatError
 from DiffieHellman import DiffieHellman
+from SChatMainGUI import SChatMainGUI
+from openChatWindowGUI import openChatWindowGUI
+from chatWindowGUI import chatWindowGUI

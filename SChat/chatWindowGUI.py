@@ -1,25 +1,20 @@
-import sys
 import time
-from appJar import gui
 from SChat import SChatError
 import threading
 
-class chatWin:
+class chatWindowGUI:
 	def __init__(self,pchat,app):
 		self.app2=app
 		self.app2.startSubWindow(pchat.duser)
 		self.app2.setGeometry("400x400")
 
-		#self.app2 = gui("Chat Window","400x400")
 		self.pchat = pchat
 		self.username = pchat.suser
 		self.peerUsername = pchat.duser
 	def chatf(self,button):
-		#cht = self.app2.getEntry("chatbox")
 		cht=self.chatbox.get()
-		#self.app2.clearEntry("chatbox", False)
-		#self.chatbox.var.set("") How to clear? DKDC
-		#self.chatbox.focus_set()
+		#How can i clear the chatbox?? maybe you will find a way...I didn't
+		#1 Devloper give up on this problem, when you will give up, please bump the counter for future reference 
 		self.pchat.output(cht)
 		self.app2.addListItem(self.peerUsername+"."+"list",time.strftime("%H:%M") + " " + self.username + ": " + cht)
 	def updateChatPolling(self):
@@ -46,7 +41,6 @@ class chatWin:
 			outList=[]
 			self.app2.addEntry(self.peerUsername+"."+"chatbox",list=outList)
 			self.chatbox=outList[0]
-			#self.app2.addEntry("chatbox2")
 			self.app2.addButton("Send "+self.peerUsername,self.chatf)
 			self.app2.enableEnter(self.chatf)
 			recv_thread = threading.Thread(target=self.updateChatPolling)
@@ -54,20 +48,5 @@ class chatWin:
 			recv_thread.start()
 			self.app2.setPollTime(1000)
 			self.app2.showSubWindow(self.peerUsername)
-
-			#self.app2.go(None,None,self.sendExitMsg)
 		except SChatError as er:
 			self.app2.errorBox('Error!', er)
-			
-			
-#if len(sys.argv)<4:
-#	print 'Usage chatWindow.py <serverIp> <SUserName> <DUserName>'
-#username=sys.argv[2]
-#dusername=sys.argv[3]
-#server=ClientServer(ServerConnection(sys.argv[1],5000,None,'keys/key.pem'),username)
-#dIp,sharedkey, nounce,token= self.server.getInfo(dusername)
-#p=P2PChat(username) #<-need username
-#p.startChat(cht,dIp,5002,sharedkey,nounce,token)
-#p.LoadChat()
-#cwindow = chatWin(p)
-#cwindow.openWindow()

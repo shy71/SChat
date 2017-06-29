@@ -85,6 +85,8 @@ class SChatServer:
 				self.sendInfo(addr,srcUser,desUser,nounce,newKey)
 			elif header=='c':
 				srcUser,token=dMsg.split(';')[1:]
+				if srcUser not in self.users:
+					self.sendError(addr,'21')
 				print 'Got connect Requset - '+srcUser
 				tokenStatus=self.connectTokenValid(addr,srcUser,token)
 				if tokenStatus!=1:
@@ -96,9 +98,9 @@ class SChatServer:
 		decToken=self.decrypForUser(srcUser,token)
 		tokUser,tokTime=decToken.split(';')
 		if tokUser!=srcUser:
-			return 21
-		if abs(time()-int(tokTime))>300:
 			return 22
+		if abs(time()-int(tokTime))>300:
+			return 23
 		self.usersIp[srcUser]=addr[0]
 		self.usersConnectTime[srcUser]=time()
 		self.sendSucess(addr,srcUser,'c;'+tokTime)

@@ -1,16 +1,11 @@
-from SChat import ClientServer
-from M2Crypto import RSA 
-from SChat import ServerConnection
 from SChat import SChatError
-from random import randint
 from SChat import P2PChat
-from chatWindow import chatWin
+from chatWindowGUI import chatWindowGUI
 import threading
 import sys
-import time
 from appJar import gui
 
-class openChatWindow:
+class openChatWindowGUI:
 	def __init__(self,server,username):#,username,ip,sharedKey,nounce,token
 		self.app2 = gui("Options Window","400x200")
 		self.server = server
@@ -22,20 +17,9 @@ class openChatWindow:
 			p = P2PChat(self.username)
 			p.waitForRequest()
 			p.LoadChat()
-			#self.app2.topLevel.after(1,self.openChat(p))
 			while self.openingWin:
 				pass
 			self.incom.append(p)
-			
-			#cwindow = chatWin(p,self.app2)
-			#cwindow.openWindow()				
-			#recv_thread = threading.Thread(target=cwindow.openWindow)
-			#recv_thread.setDaemon(True)
-			#recv_thread.start()
-			#openchatwindow with that user
-		#except SChatError as er:
-		#	raise er
-			#self.app2.errorBox('Error!', er)
 	def openChat(self,p):
 		cwindow = chatWin(p)
 		cwindow.openWindow()
@@ -43,12 +27,11 @@ class openChatWindow:
 		try:
 			cht = self.app2.getEntry("chat")
 			self.app2.clearEntry("chat", False)
-			#subprocess.call(['python chatWindow.py '+self.server.], shell=True)
 			dIp,sharedkey,token= self.server.getInfo(cht)
-			p=P2PChat(self.username) #<-need username
+			p=P2PChat(self.username)
 			p.startChat(cht,dIp,5002,sharedkey,token)
 			p.LoadChat()
-			cwindow = chatWin(p,self.app2)
+			cwindow = chatWindowGUI(p,self.app2)
 			cwindow.openWindow()
 		except SChatError as er:
 			self.app2.errorBox('Error!', er)
@@ -58,7 +41,7 @@ class openChatWindow:
 	def checkRequests(self):
 		self.openingWin=True
 		for item in self.incom:
-			cwindow = chatWin(item,self.app2)
+			cwindow = chatWindowGUI(item,self.app2)
 			cwindow.openWindow()
 		self.incom=[]
 		self.openingWin=False
